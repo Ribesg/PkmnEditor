@@ -35,10 +35,8 @@ public final class Rom {
     public static int ROM_HEADER_SIZE      = 0x084;
     public static int HEADER_CHECKSUM      = 0x15E;
 
-    public static int ARM9_FOOTER_LENGTH = 12;
-
-    private final Path       filePath;
-    private       ByteBuffer content;
+    private final Path filePath;
+    private ByteBuffer content = null;
 
     public Rom(@NotNull final Path filePath) {
         assert Files.exists(filePath) : "File not found: " + filePath;
@@ -55,12 +53,7 @@ public final class Rom {
         Log.info("Loaded in " + timer.diffString());
     }
 
-    public ByteBuffer content() {
-        assert this.content != null : "Rom isn't loaded!";
-        return this.content;
-    }
-
-    public void logHeaderData() {
+    public void printHeader() {
         Log.info("GAME_TITLE = " + this.getGameTitle());
         Log.info("GAME_CODE = " + this.getGameCode());
         Log.info("MAKER = " + this.getMaker());
@@ -87,6 +80,28 @@ public final class Rom {
         Log.info("HEADER_CHECKSUM = " + this.getShortAsHex(Rom.HEADER_CHECKSUM));
     }
 
+    public ByteBuffer content() {
+        assert this.content != null : "Rom isn't loaded!";
+        return this.content;
+    }
+
+    public ByteBuffer getArm9Data() {
+        final ByteBuffer content = this.content();
+        try {
+            final int arm9Offset = this.getInt(Rom.ARM9_OFFSET);
+            final int arm9Size = this.getInt(Rom.ARM9_SIZE);
+            content.position(arm9Offset);
+            if (this.content().get(arm9Offset + arm9Size) == 0xFF) {
+                content.limit(arm9Offset + arm9Size);
+            } else {
+                content.limit(arm9Offset + arm9Size + 12 /* Footer length */);
+            }
+            return content.slice().asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
+        } finally {
+            content.flip();
+        }
+    }
+
     public String getGameTitle() {
         return this.readString("", 0x0000, 10);
     }
@@ -106,23 +121,6 @@ public final class Rom {
         }
     }
 
-    public ByteBuffer getArm9Data() {
-        final ByteBuffer content = this.content();
-        try {
-            final int arm9Offset = this.getInt(Rom.ARM9_OFFSET);
-            final int arm9Size = this.getInt(Rom.ARM9_SIZE);
-            content.position(arm9Offset);
-            if (this.content().get(arm9Offset + arm9Size) == 0xFF) {
-                content.limit(arm9Offset + arm9Size);
-            } else {
-                content.limit(arm9Offset + arm9Size + Rom.ARM9_FOOTER_LENGTH);
-            }
-            return content.slice().asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
-        } finally {
-            content.flip();
-        }
-    }
-
     public String getIntAsHex(final int offset) {
         return "0x" + Integer.toHexString(this.getInt(offset)).toUpperCase();
     }
@@ -139,7 +137,7 @@ public final class Rom {
         return this.content().getShort(offset);
     }
 
-    private String readString(@NotNull final String prefix, final int offset, final int size) {
+    public String readString(@NotNull final String prefix, final int offset, final int size) {
         final ByteBuffer content = this.content();
         final StringBuilder res = new StringBuilder(prefix);
         for (int i = offset; i < offset + size; i++) {

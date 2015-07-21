@@ -25,6 +25,10 @@ public final class Log {
         });
     }
 
+    public static boolean isDebugEnabled() {
+        return Log.LOGGER.isLoggable(Level.FINE);
+    }
+
     public static void debug(final Object message) {
         Log.LOGGER.log(Level.FINE, message.toString());
     }
