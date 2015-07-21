@@ -12,16 +12,17 @@ public final class Main {
     private static final int STARTER_3_OFFSET = 0x108540;
 
     public static void main(final String[] args) {
+        if (args.length != 1) {
+            Log.info("Usage: java -jar PkmnEditor.jar <romName>");
+        }
         try {
-            new Main();
+            new Main(args[0]);
         } catch (final Throwable t) {
             Log.error("Oops", t);
         }
     }
 
-    private Main() throws Throwable {
-        final String romName = "Pokemon_HG_Fr.nds";
-
+    private Main(final String romName) throws Throwable {
         final Timer timer = new Timer().start();
 
         try {

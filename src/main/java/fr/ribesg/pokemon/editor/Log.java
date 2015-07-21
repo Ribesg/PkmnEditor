@@ -13,7 +13,7 @@ public final class Log {
         Log.LOGGER = Logger.getLogger("PkmnEditor");
         System.setProperty(
             "java.util.logging.SimpleFormatter.format",
-            "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL %4$-7s %5$s %6$s%n"
+            "%5$s %6$s%n"
         );
         for (final Handler h : Log.LOGGER.getHandlers()) {
             Log.LOGGER.removeHandler(h);
