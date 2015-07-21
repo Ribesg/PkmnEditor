@@ -23,6 +23,13 @@ public final class Main {
     }
 
     private Main(final String romName) throws Throwable {
+        Log.info("Original ROM data:");
+        final Rom rom = new Rom(Paths.get(romName));
+        rom.load();
+        rom.printHeader();
+
+        Log.info("");
+
         final Timer timer = new Timer().start();
 
         try {
@@ -61,5 +68,11 @@ public final class Main {
         Tool.build(romName);
 
         Log.info("Done in " + timer.stop().diffString());
+        Log.info("");
+
+        Log.info("Final ROM data:");
+        final Rom newRom = new Rom(Paths.get(Tool.newRomName(romName)));
+        newRom.load();
+        newRom.printHeader();
     }
 }

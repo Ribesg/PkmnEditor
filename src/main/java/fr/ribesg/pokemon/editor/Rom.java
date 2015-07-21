@@ -54,30 +54,42 @@ public final class Rom {
     }
 
     public void printHeader() {
-        Log.info("GAME_TITLE = " + this.getGameTitle());
-        Log.info("GAME_CODE = " + this.getGameCode());
-        Log.info("MAKER = " + this.getMaker());
-        Log.info("ARM9_OFFSET = " + this.getIntAsHex(Rom.ARM9_OFFSET));
-        Log.info("ARM9_ENTRY = " + this.getIntAsHex(Rom.ARM9_ENTRY));
-        Log.info("ARM9_RAM = " + this.getIntAsHex(Rom.ARM9_RAM));
-        Log.info("ARM9_SIZE = " + this.getIntAsHex(Rom.ARM9_SIZE));
-        Log.info("ARM7_OFFSET = " + this.getIntAsHex(Rom.ARM7_OFFSET));
-        Log.info("ARM7_ENTRY = " + this.getIntAsHex(Rom.ARM7_ENTRY));
-        Log.info("ARM7_RAM = " + this.getIntAsHex(Rom.ARM7_RAM));
-        Log.info("ARM7_SIZE = " + this.getIntAsHex(Rom.ARM7_SIZE));
-        Log.info("FNT_OFFSET = " + this.getIntAsHex(Rom.FNT_OFFSET));
-        Log.info("FNT_SIZE = " + this.getIntAsHex(Rom.FNT_SIZE));
-        Log.info("FAT_OFFSET = " + this.getIntAsHex(Rom.FAT_OFFSET));
-        Log.info("FAT_SIZE = " + this.getIntAsHex(Rom.FAT_SIZE));
-        Log.info("ARM9_OVERLAY_OFFSET = " + this.getIntAsHex(Rom.ARM9_OVERLAY_OFFSET));
-        Log.info("ARM9_OVERLAY_SIZE = " + this.getIntAsHex(Rom.ARM9_OVERLAY_SIZE));
-        Log.info("ARM7_OVERLAY_OFFSET = " + this.getIntAsHex(Rom.ARM7_OVERLAY_OFFSET));
-        Log.info("ARM7_OVERLAY_SIZE = " + this.getIntAsHex(Rom.ARM7_OVERLAY_SIZE));
-        Log.info("ICON_TITLE_OFFSET = " + this.getIntAsHex(Rom.ICON_TITLE_OFFSET));
-        Log.info("SECURE_AREA_CHECKSUM = " + this.getShortAsHex(Rom.SECURE_AREA_CHECKSUM));
-        Log.info("TOTAL_USED_ROM_SIZE = " + this.getIntAsHex(Rom.TOTAL_USED_ROM_SIZE));
-        Log.info("ROM_HEADER_SIZE = " + this.getIntAsHex(Rom.ROM_HEADER_SIZE));
-        Log.info("HEADER_CHECKSUM = " + this.getShortAsHex(Rom.HEADER_CHECKSUM));
+        Log.info("\tGAME_TITLE = " + this.getGameTitle());
+        Log.info("\tGAME_CODE = " + this.getGameCode());
+        Log.info("\tMAKER = " + this.getMaker());
+        Log.info("\tARM9_OFFSET = " + this.getIntAsHex(Rom.ARM9_OFFSET));
+        Log.info("\tARM9_ENTRY = " + this.getIntAsHex(Rom.ARM9_ENTRY));
+        Log.info("\tARM9_RAM = " + this.getIntAsHex(Rom.ARM9_RAM));
+        Log.info("\tARM9_SIZE = " + this.getIntAsHex(Rom.ARM9_SIZE) +
+                 "\n\t\t-> ARM9_END_OFFSET = " + this.asHex(this.getInt(Rom.ARM9_OFFSET) + this.getInt(Rom.ARM9_SIZE))
+        );
+        Log.info("\tARM7_OFFSET = " + this.getIntAsHex(Rom.ARM7_OFFSET));
+        Log.info("\tARM7_ENTRY = " + this.getIntAsHex(Rom.ARM7_ENTRY));
+        Log.info("\tARM7_RAM = " + this.getIntAsHex(Rom.ARM7_RAM));
+        Log.info("\tARM7_SIZE = " + this.getIntAsHex(Rom.ARM7_SIZE) +
+                 "\n\t\t-> ARM7_END_OFFSET = " + this.asHex(this.getInt(Rom.ARM7_OFFSET) + this.getInt(Rom.ARM7_SIZE))
+        );
+        Log.info("\tFNT_OFFSET = " + this.getIntAsHex(Rom.FNT_OFFSET));
+        Log.info("\tFNT_SIZE = " + this.getIntAsHex(Rom.FNT_SIZE) +
+                 "\n\t\t-> FNT_END_OFFSET = " + this.asHex(this.getInt(Rom.FNT_OFFSET) + this.getInt(Rom.FNT_SIZE))
+        );
+        Log.info("\tFAT_OFFSET = " + this.getIntAsHex(Rom.FAT_OFFSET));
+        Log.info("\tFAT_SIZE = " + this.getIntAsHex(Rom.FAT_SIZE) +
+                 "\n\t\t-> FAT_END_OFFSET = " + this.asHex(this.getInt(Rom.FAT_OFFSET) + this.getInt(Rom.FAT_SIZE))
+        );
+        Log.info("\tARM9_OVERLAY_OFFSET = " + this.getIntAsHex(Rom.ARM9_OVERLAY_OFFSET));
+        Log.info("\tARM9_OVERLAY_SIZE = " + this.getIntAsHex(Rom.ARM9_OVERLAY_SIZE) +
+                 "\n\t\t-> ARM9_OVERLAY_END_OFFSET = " + this.asHex(this.getInt(Rom.ARM9_OVERLAY_OFFSET) + this.getInt(Rom.ARM9_OVERLAY_SIZE))
+        );
+        Log.info("\tARM7_OVERLAY_OFFSET = " + this.getIntAsHex(Rom.ARM7_OVERLAY_OFFSET));
+        Log.info("\tARM7_OVERLAY_SIZE = " + this.getIntAsHex(Rom.ARM7_OVERLAY_SIZE) +
+                 "\n\t\t-> ARM7_OVERLAY_END_OFFSET = " + this.asHex(this.getInt(Rom.ARM7_OVERLAY_OFFSET) + this.getInt(Rom.ARM7_OVERLAY_SIZE))
+        );
+        Log.info("\tICON_TITLE_OFFSET = " + this.getIntAsHex(Rom.ICON_TITLE_OFFSET));
+        Log.info("\tSECURE_AREA_CHECKSUM = " + this.getShortAsHex(Rom.SECURE_AREA_CHECKSUM));
+        Log.info("\tTOTAL_USED_ROM_SIZE = " + this.getIntAsHex(Rom.TOTAL_USED_ROM_SIZE));
+        Log.info("\tROM_HEADER_SIZE = " + this.getIntAsHex(Rom.ROM_HEADER_SIZE));
+        Log.info("\tHEADER_CHECKSUM = " + this.getShortAsHex(Rom.HEADER_CHECKSUM));
     }
 
     public ByteBuffer content() {
@@ -122,7 +134,11 @@ public final class Rom {
     }
 
     public String getIntAsHex(final int offset) {
-        return "0x" + Integer.toHexString(this.getInt(offset)).toUpperCase();
+        return this.asHex(this.getInt(offset));
+    }
+
+    private String asHex(final int integer) {
+        return "0x" + Integer.toHexString(integer).toUpperCase();
     }
 
     public int getInt(final int offset) {

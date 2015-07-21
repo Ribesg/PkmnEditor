@@ -21,12 +21,17 @@ public final class Log {
         Log.LOGGER.addHandler(new ConsoleHandler() {
             {
                 this.setOutputStream(System.out);
+                this.setLevel(Level.ALL);
             }
         });
     }
 
     public static boolean isDebugEnabled() {
         return Log.LOGGER.isLoggable(Level.FINE);
+    }
+
+    public static void enableDebug() {
+        Log.LOGGER.setLevel(Level.ALL);
     }
 
     public static void debug(final Object message) {
