@@ -45,12 +45,12 @@ public final class Rom {
 
     public void load() throws IOException {
         assert this.content == null : "Rom is already loaded!";
-        Log.info("Reading ROM file...");
+        Log.debug("Reading ROM file...");
         final Timer timer = new Timer().start();
         final byte[] bytes = Files.readAllBytes(this.filePath);
         this.content = ByteBuffer.wrap(bytes).asReadOnlyBuffer().order(ByteOrder.LITTLE_ENDIAN);
         timer.stop();
-        Log.info("Loaded in " + timer.diffString());
+        Log.debug("Loaded in " + timer.diffString());
     }
 
     public void printHeader() {

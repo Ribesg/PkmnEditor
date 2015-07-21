@@ -21,13 +21,23 @@ public final class Main {
 
     private Main() throws Throwable {
         final String romName = "Pokemon_HG_Fr.nds";
+
+        final Timer timer = new Timer().start();
+
         try {
+            Log.info("Creating a backup of " + romName + " as " + romName + ".original...");
             Files.copy(Paths.get(romName), Paths.get(romName + ".original"));
         } catch (final FileAlreadyExistsException ignored) {
+            Log.info("\tFile already exists!");
         }
 
+        Log.info("Extracting rom file using ndstool...");
         Tool.extract(romName);
+
+        Log.info("Decompressing arm9.bin...");
         Tool.decompressArm9(romName);
+
+        Log.info("Fixing arm9.bin so that it could work in a rom without being recompressed...");
         Tool.fixArm9(romName);
 /*
         final ByteBuffer oneIntBuffer = ByteBuffer.allocate(4);
@@ -46,6 +56,9 @@ public final class Main {
             arm9.write(oneIntBuffer);
         }
 */
+        Log.info("Rebuilding rom as " + Tool.newRomName(romName) + "...");
         Tool.build(romName);
+
+        Log.info("Done in " + timer.stop().diffString());
     }
 }
