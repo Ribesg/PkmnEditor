@@ -32,6 +32,7 @@ public final class Arm9Tools {
             throw new RuntimeException("Not found :-/");
         }
         if (Log.isDebugEnabled()) {
+            // Should be 0x00000BB4 for Pokemon HG Fra
             Log.debug("Magic fix applied at 0x" + String.format("%08X", pointerPos));
         }
         rom.putInt(pointerPos, 0);
@@ -118,10 +119,10 @@ public final class Arm9Tools {
         while (inPos > inputEnd) {
             if (bit == 0) {
                 bit = 0x80;
-                flagByte = input.get(--inPos);
+                flagByte = 0xFF & input.get(--inPos);
             }
             if ((flagByte & bit) != 0) {
-                pos = (input.get(inPos - 2) | (input.get(inPos - 1) << 8) & 0xFFF) + 2;
+                pos = ((0xFF & input.get(inPos - 2)) | ((0xFF & input.get(inPos - 1)) << 8) & 0xFFF) + 2;
                 size = ((0xFF & input.get(inPos - 1)) >> 4) + 3;
                 inPos -= 2;
                 for (i = 0; i < size; i++) {

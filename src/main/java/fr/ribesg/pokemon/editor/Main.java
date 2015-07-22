@@ -32,12 +32,8 @@ public final class Main {
 
         final Timer timer = new Timer().start();
 
-        try {
-            Log.info("Creating a backup of " + romName + " as " + romName + ".original...");
-            Files.copy(Paths.get(romName), Paths.get(romName + ".original"));
-        } catch (final FileAlreadyExistsException ignored) {
-            Log.info("\tFile already exists!");
-        }
+        Log.info("Creating a backup of " + romName + " as " + romName + ".original...");
+        Files.copy(Paths.get(romName), Paths.get(romName + ".original"), StandardCopyOption.REPLACE_EXISTING);
 
         Log.info("Extracting rom file using ndstool...");
         Tool.extract(romName);
@@ -66,6 +62,9 @@ public final class Main {
 */
         Log.info("Rebuilding rom as " + Tool.newRomName(romName) + "...");
         Tool.build(romName);
+
+        Log.info("Putting backup " + romName + ".original as back to " + romName + "...");
+        Files.move(Paths.get(romName + ".original"), Paths.get(romName), StandardCopyOption.REPLACE_EXISTING);
 
         Log.info("Done in " + timer.stop().diffString());
         Log.info("");

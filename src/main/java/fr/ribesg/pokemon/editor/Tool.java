@@ -60,7 +60,7 @@ public final class Tool {
             "-h", '"' + folderName + "/header.bin" + '"'
         };
         Tool.ndstool(args);
-        FileUtils.deleteDirectory(folderPath.toFile());
+        //FileUtils.deleteDirectory(folderPath.toFile());
     }
 
     // ######### //
@@ -68,11 +68,10 @@ public final class Tool {
     // ######### //
 
     public static void decompressArm9(final String romName) throws IOException, InterruptedException {
-        final Rom rom = new Rom(Paths.get(romName));
-        rom.load();
-        final ByteBuffer arm9 = rom.getArm9Data();
+        final Path arm9FilePath = Paths.get(Tool.folderName(romName) + "/arm9.bin");
+        final ByteBuffer arm9 = ByteBuffer.wrap(Files.readAllBytes(arm9FilePath)).order(ByteOrder.LITTLE_ENDIAN);
         final ByteBuffer res = Arm9Tools.decompressBlz(arm9);
-        Files.write(Paths.get(Tool.folderName(romName) + "/arm9.bin"), res.array());
+        Files.write(arm9FilePath, res.array());
     }
 
     // ############ //
@@ -112,7 +111,7 @@ public final class Tool {
     }
 
     public static String folderName(final String romName) {
-        return "extracted_" + romName.replaceFirst("\\..+?$", "");
+        return "extracted_" + romName;
     }
 
     private static String[] prepend(final String arg0, final String[] args) {
