@@ -1,5 +1,6 @@
 package fr.ribesg.pokemon.editor;
 
+import java.io.RandomAccessFile;
 import java.nio.file.*;
 
 /**
@@ -43,25 +44,22 @@ public final class Main {
 
         Log.info("Fixing arm9.bin so that it could work in a rom without being recompressed...");
         Tool.fixArm9(romName);
-/*
-        final ByteBuffer oneIntBuffer = ByteBuffer.allocate(4);
-        try (final SeekableByteChannel arm9 = Files.newByteChannel(Paths.get(arm9File), StandardOpenOption.WRITE)) {
 
-            arm9.position(Main.STARTER_1_OFFSET);
-            oneIntBuffer.putInt(0, 1);
-            arm9.write(oneIntBuffer);
-
-            arm9.position(Main.STARTER_2_OFFSET);
-            oneIntBuffer.putInt(0, 4);
-            arm9.write(oneIntBuffer);
-
-            arm9.position(Main.STARTER_3_OFFSET);
-            oneIntBuffer.putInt(0, 7);
-            arm9.write(oneIntBuffer);
+        try (
+            final RandomAccessFile arm9 = new RandomAccessFile(
+                Tool.arm9FileName(romName), "rw"
+            )
+        ) {
+            arm9.seek(Main.STARTER_1_OFFSET);
+            arm9.writeInt(Tool.switchEndianness(446));
+            arm9.seek(Main.STARTER_2_OFFSET);
+            arm9.writeInt(Tool.switchEndianness(447));
+            arm9.seek(Main.STARTER_3_OFFSET);
+            arm9.writeInt(Tool.switchEndianness(399));
         }
-*/
+
         Log.info("Rebuilding rom as " + Tool.newRomName(romName) + "...");
-        Tool.build(romName);
+        Tool.build(romName, false);
 
         Log.info("Putting backup " + romName + ".original as back to " + romName + "...");
         Files.move(Paths.get(romName + ".original"), Paths.get(romName), StandardCopyOption.REPLACE_EXISTING);
