@@ -1,5 +1,7 @@
 package fr.ribesg.pokemon.editor;
 
+import fr.ribesg.pokemon.editor.tool.*;
+
 import java.io.RandomAccessFile;
 import java.nio.file.*;
 
@@ -24,12 +26,18 @@ public final class Main {
     }
 
     private Main(final String romName) throws Throwable {
-        Log.info("Original ROM data:");
-        final Rom rom = new Rom(Paths.get(romName));
-        rom.load();
-        rom.printHeader();
+        final String folderName = MiscTools.folderName(romName);
+        final String arm9FileName = folderName + "/arm9.bin";
+        final String newRomName = MiscTools.newRomName(romName);
 
-        Log.info("");
+        if (Log.isDebugEnabled()) {
+            Log.debug("Original ROM data:");
+            final Rom rom = new Rom(Paths.get(romName));
+            rom.load();
+            rom.printHeader();
+
+            Log.info("");
+        }
 
         final Timer timer = new Timer().start();
 
@@ -37,39 +45,42 @@ public final class Main {
         Files.copy(Paths.get(romName), Paths.get(romName + ".original"), StandardCopyOption.REPLACE_EXISTING);
 
         Log.info("Extracting rom file using ndstool...");
-        Tool.extract(romName);
+        NdsTool.extract(romName, folderName);
 
         Log.info("Decompressing arm9.bin...");
-        Tool.decompressArm9(romName);
+        Arm9Tool.decompressArm9(arm9FileName);
 
         Log.info("Fixing arm9.bin so that it could work in a rom without being recompressed...");
-        Tool.fixArm9(romName);
+        Arm9Tool.fixArm9(romName, arm9FileName);
 
         try (
             final RandomAccessFile arm9 = new RandomAccessFile(
-                Tool.arm9FileName(romName), "rw"
+                arm9FileName, "rw"
             )
         ) {
             arm9.seek(Main.STARTER_1_OFFSET);
-            arm9.writeInt(Tool.switchEndianness(446));
+            arm9.writeInt(MiscTools.switchEndianness(446));
             arm9.seek(Main.STARTER_2_OFFSET);
-            arm9.writeInt(Tool.switchEndianness(447));
+            arm9.writeInt(MiscTools.switchEndianness(447));
             arm9.seek(Main.STARTER_3_OFFSET);
-            arm9.writeInt(Tool.switchEndianness(399));
+            arm9.writeInt(MiscTools.switchEndianness(399));
         }
 
-        Log.info("Rebuilding rom as " + Tool.newRomName(romName) + "...");
-        Tool.build(romName, false);
+        Log.info("Rebuilding rom as " + newRomName + "...");
+        NdsTool.build(folderName, newRomName, false);
 
         Log.info("Putting backup " + romName + ".original as back to " + romName + "...");
         Files.move(Paths.get(romName + ".original"), Paths.get(romName), StandardCopyOption.REPLACE_EXISTING);
 
         Log.info("Done in " + timer.stop().diffString());
-        Log.info("");
 
-        Log.info("Final ROM data:");
-        final Rom newRom = new Rom(Paths.get(Tool.newRomName(romName)));
-        newRom.load();
-        newRom.printHeader();
+        if (Log.isDebugEnabled()) {
+            Log.info("");
+
+            Log.debug("Final ROM data:");
+            final Rom newRom = new Rom(Paths.get(newRomName));
+            newRom.load();
+            newRom.printHeader();
+        }
     }
 }
