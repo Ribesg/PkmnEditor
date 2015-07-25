@@ -49,7 +49,7 @@ public final class NdsTool {
             FileUtils.deleteDirectory(folderPath.toFile());
         }
         Files.createDirectory(folderPath);
-        final String romPathString = romPath.toAbsolutePath().toString();
+        final String romPathString = romPath.toAbsolutePath().toString().replace("\\", "/");
         final String folderPathString = folderPath.toAbsolutePath().toString();
         final String[] args = new String[] {
             "-x", '"' + romPathString + '"',
@@ -80,7 +80,7 @@ public final class NdsTool {
         if (!Files.isDirectory(folderPath)) {
             throw new IOException("No folder for this rom name");
         }
-        final String newRomPathString = newRomPath.toAbsolutePath().toString();
+        final String newRomPathString = newRomPath.toAbsolutePath().toString().replace("\\", "/");
         final String folderPathString = folderPath.toAbsolutePath().toString();
         final String[] args = new String[] {
             "-c", '"' + newRomPathString + '"',

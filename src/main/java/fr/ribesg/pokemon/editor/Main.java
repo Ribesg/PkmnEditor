@@ -4,10 +4,13 @@ import fr.ribesg.pokemon.editor.gui.MainWindow;
 import fr.ribesg.pokemon.editor.tool.NdsTool;
 import org.apache.commons.io.FileUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.jar.JarFile;
 
 /**
@@ -15,13 +18,15 @@ import java.util.jar.JarFile;
  */
 public final class Main {
 
+    public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+
     public static void main(final String[] args) {
         try {
             if (Arrays.asList(args).contains("--debug")) {
                 Log.setDebugEnabled(true);
             }
             Main.extractTools();
-            new MainWindow();
+            Main.EXECUTOR.submit(MainWindow::new);
         } catch (final Throwable t) {
             Log.error("Oops", t);
         }
@@ -40,11 +45,12 @@ public final class Main {
                 jar.stream()
                    .filter(entry -> entry.getName().startsWith("tools"))
                    .forEach(entry -> {
+                       Log.info(entry.getName());
                        try {
                            if (entry.isDirectory()) {
                                Files.createDirectories(tmp.resolve(entry.getName()));
                            } else {
-                               Main.extract(jar.getInputStream(entry), tmp.resolve(entry.getName()));
+                               Files.copy(jar.getInputStream(entry), tmp.resolve(entry.getName()));
                            }
                        } catch (final IOException e) {
                            throw new UncheckedIOException(e);
@@ -54,14 +60,10 @@ public final class Main {
                 // This is some weird lambda-throwing-exception thing... but works
                 throw e.getCause();
             }
-            NdsTool.setNdstoolLocation(tmp.toAbsolutePath().toString() + "/ndstool/ndstool.exe");
+            NdsTool.setNdstoolLocation(tmp.resolve("tools").resolve("ndstool").resolve("ndstool.exe").toString());
         } else {
             // Running in IDE
             NdsTool.setNdstoolLocation("src/main/resources/tools/ndstool/ndstool.exe");
         }
-    }
-
-    private static void extract(final InputStream in, final Path to) {
-
     }
 }

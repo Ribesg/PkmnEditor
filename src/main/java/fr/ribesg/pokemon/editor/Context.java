@@ -35,6 +35,10 @@ public final class Context {
         this.startersChanged = false;
     }
 
+    public void loadLang(final String lang) throws IOException {
+        this.lang = new Lang(lang);
+    }
+
     public boolean saveRomAs(final Path path) {
         final boolean nothingToDo = !this.startersChanged;
         if (nothingToDo) {
@@ -57,7 +61,7 @@ public final class Context {
                 return false;
             }
             try {
-                Arm9Tool.fixArm9(path, arm9Path);
+                Arm9Tool.fixArm9(this.romPath, arm9Path);
             } catch (final IOException e) {
                 Log.error("Failed to fix arm9.bin", e);
                 return false;

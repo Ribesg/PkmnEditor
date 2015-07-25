@@ -1,7 +1,7 @@
 package fr.ribesg.pokemon.editor;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -21,7 +21,9 @@ public final class Lang {
         final String resourceName = "lang/" + lang + ".properties";
 
         this.props = new Properties();
-        this.props.load(this.getClass().getClassLoader().getResourceAsStream(resourceName));
+        this.props.load(new InputStreamReader(
+            this.getClass().getClassLoader().getResourceAsStream(resourceName), StandardCharsets.UTF_8
+        ));
 
         try {
             this.setPokemons();
@@ -31,7 +33,7 @@ public final class Lang {
         }
     }
 
-    public String get(final String key, final String... args) throws UncheckedIOException {
+    public String get(final String key, final Object... args) throws UncheckedIOException {
         try {
             return String.format(this.fromProps(this.props, key), args);
         } catch (final IOException e) {
