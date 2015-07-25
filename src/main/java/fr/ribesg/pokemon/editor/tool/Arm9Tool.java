@@ -4,9 +4,11 @@ import fr.ribesg.pokemon.editor.Log;
 import fr.ribesg.pokemon.editor.Rom;
 
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * @author Kingcom (Original C# code)
@@ -36,30 +38,46 @@ public final class Arm9Tool {
     };
 
     /**
+     * Sets multiple ints in the arm9.bin file, switching the endianness in
+     * the process.
+     *
+     * @param arm9Path         path to the arm9.bin file
+     * @param offsetsAndValues offset-value couples
+     *
+     * @throws IOException if anything wrong occurs
+     */
+    public static void setInts(final Path arm9Path, final int... offsetsAndValues) throws IOException {
+        assert offsetsAndValues.length % 2 == 0;
+        try (final RandomAccessFile arm9 = new RandomAccessFile(arm9Path.toFile(), "rw")) {
+            for (int i = 0; i < offsetsAndValues.length; i += 2) {
+                arm9.seek(offsetsAndValues[i]);
+                arm9.writeInt(MiscTools.switchEndianness(offsetsAndValues[i + 1]));
+            }
+        }
+    }
+
+    /**
      * Decompresses an arm9.bin file in place.
      *
-     * @param arm9Name the arm9.bin file name (path)
+     * @param arm9Path the arm9.bin file path
      *
      * @throws IOException if some I/O goes wrong
      */
-    public static void decompressArm9(final String arm9Name) throws IOException {
-        final Path arm9FilePath = Paths.get(arm9Name);
-        final ByteBuffer arm9 = ByteBuffer.wrap(Files.readAllBytes(arm9FilePath)).order(ByteOrder.LITTLE_ENDIAN);
+    public static void decompressArm9(final Path arm9Path) throws IOException {
+        final ByteBuffer arm9 = ByteBuffer.wrap(Files.readAllBytes(arm9Path)).order(ByteOrder.LITTLE_ENDIAN);
         final ByteBuffer res = Arm9Tool.decompressBlz(arm9);
-        Files.write(arm9FilePath, res.array());
+        Files.write(arm9Path, res.array());
     }
 
     /**
      * Fixes an extracted arm9.bin file.
      *
-     * @param romName  the rom name the arm9.bin file was extracted from
-     * @param arm9Name the arm9.bin file name (path)
+     * @param romPath  the rom path the arm9.bin file was extracted from
+     * @param arm9Path the arm9.bin file path
      *
      * @throws IOException if some I/O goes wrong
      */
-    public static void fixArm9(final String romName, final String arm9Name) throws IOException {
-        final Path romPath = Paths.get(romName);
-        final Path arm9Path = Paths.get(arm9Name);
+    public static void fixArm9(final Path romPath, final Path arm9Path) throws IOException {
         final Rom rom = new Rom(romPath);
         rom.load();
         final int arm9Ram = rom.getInt(Rom.ARM9_RAM);

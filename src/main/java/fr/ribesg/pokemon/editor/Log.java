@@ -1,5 +1,8 @@
 package fr.ribesg.pokemon.editor;
 
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
 import java.util.logging.*;
 
 /**
@@ -30,19 +33,60 @@ public final class Log {
         return Log.LOGGER.isLoggable(Level.FINE);
     }
 
-    public static void enableDebug() {
-        Log.LOGGER.setLevel(Level.ALL);
+    public static void setDebugEnabled(final boolean value) {
+        Log.LOGGER.setLevel(value ? Level.ALL : Level.INFO);
+    }
+
+    public static void logInto(final JTextArea textArea) {
+        Log.LOGGER.addHandler(new ConsoleHandler() {
+
+            {
+                this.setLevel(Level.ALL);
+            }
+
+            @Override
+            public void publish(@NotNull final LogRecord record) {
+                if (!this.isLoggable(record)) {
+                    return;
+                }
+                String msg;
+                try {
+                    msg = this.getFormatter().format(record);
+                } catch (final Exception e) {
+                    // We don't want to throw an exception here, but we
+                    // report the exception to any registered ErrorManager.
+                    this.reportError(null, e, ErrorManager.FORMAT_FAILURE);
+                    return;
+                }
+
+                textArea.append(msg);
+            }
+        });
     }
 
     public static void debug(final Object message) {
         Log.LOGGER.log(Level.FINE, message.toString());
     }
 
+    public static void debug(final Object message, final Throwable t) {
+        Log.LOGGER.log(Level.FINE, message.toString(), t);
+    }
+
     public static void info(final Object message) {
         Log.LOGGER.log(Level.INFO, message.toString());
     }
 
+    public static void error(final Object message) {
+        Log.LOGGER.log(Level.SEVERE, message.toString());
+    }
+
     public static void error(final Object message, final Throwable t) {
         Log.LOGGER.log(Level.SEVERE, message.toString(), t);
+    }
+
+    public static void flush() {
+        for (final Handler h : Log.LOGGER.getHandlers()) {
+            h.flush();
+        }
     }
 }

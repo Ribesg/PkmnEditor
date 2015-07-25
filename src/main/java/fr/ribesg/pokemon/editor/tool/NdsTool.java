@@ -3,12 +3,19 @@ package fr.ribesg.pokemon.editor.tool;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * @author Ribesg
  */
 public final class NdsTool {
+
+    private static String NDSTOOL_LOCATION = null;
+
+    public static void setNdstoolLocation(final String location) {
+        NdsTool.NDSTOOL_LOCATION = location;
+    }
 
     /**
      * Runs NDSTool with the provided arguments.
@@ -17,42 +24,46 @@ public final class NdsTool {
      *
      * @return true if everything went well, false otherwise
      *
-     * @throws IOException          if an I/O error occurs
-     * @throws InterruptedException if this thread was interrupted while
-     *                              waiting for the process to end
+     * @throws IOException if an I/O error occurs
      */
-    public static boolean ndstool(final String[] args) throws IOException, InterruptedException {
-        return MiscTools.run(MiscTools.prepend("tools/ndstool.exe", args));
+    public static boolean ndstool(final String[] args) throws IOException {
+        assert NdsTool.NDSTOOL_LOCATION != null;
+        try {
+            return MiscTools.run(MiscTools.prepend(NdsTool.NDSTOOL_LOCATION, args));
+        } catch (final InterruptedException e) {
+            throw new IOException(e);
+        }
     }
 
     /**
      * Extracts a rom file to the provided folder using NDSTool, removing the
      * folder first if it already existed.
      *
-     * @param romName    the rom file name
-     * @param folderName the folder name
+     * @param romPath    the rom file path
+     * @param folderPath the folder path
      *
-     * @throws Throwable if anything wrong happens
+     * @throws IOException if anything wrong happens
      */
-    public static void extract(final String romName, final String folderName) throws Throwable {
-        final Path folderPath = Paths.get(folderName);
+    public static void extract(final Path romPath, final Path folderPath) throws IOException {
         while (Files.isDirectory(folderPath)) {
             FileUtils.deleteDirectory(folderPath.toFile());
         }
         Files.createDirectory(folderPath);
+        final String romPathString = romPath.toAbsolutePath().toString();
+        final String folderPathString = folderPath.toAbsolutePath().toString();
         final String[] args = new String[] {
-            "-x", '"' + romName + '"',
-            "-9", '"' + folderName + "/arm9.bin" + '"',
-            "-7", '"' + folderName + "/arm7.bin" + '"',
-            "-y9", '"' + folderName + "/y9.bin" + '"',
-            "-y7", '"' + folderName + "/y7.bin" + '"',
-            "-d", '"' + folderName + "/data" + '"',
-            "-y", '"' + folderName + "/overlay" + '"',
-            "-t", '"' + folderName + "/banner.bin" + '"',
-            "-h", '"' + folderName + "/header.bin" + '"'
+            "-x", '"' + romPathString + '"',
+            "-9", '"' + folderPathString + "/arm9.bin" + '"',
+            "-7", '"' + folderPathString + "/arm7.bin" + '"',
+            "-y9", '"' + folderPathString + "/y9.bin" + '"',
+            "-y7", '"' + folderPathString + "/y7.bin" + '"',
+            "-d", '"' + folderPathString + "/data" + '"',
+            "-y", '"' + folderPathString + "/overlay" + '"',
+            "-t", '"' + folderPathString + "/banner.bin" + '"',
+            "-h", '"' + folderPathString + "/header.bin" + '"'
         };
         if (!NdsTool.ndstool(args)) {
-            throw new RuntimeException("Failed to extract " + romName + " to " + folderName + ": NDSTool failed");
+            throw new IOException("Failed to extract " + romPathString + " to " + folderPathString + ": NDSTool failed");
         }
     }
 
@@ -60,36 +71,34 @@ public final class NdsTool {
      * Builds a rom file from the provided folder using NDSTool, eventually
      * removing the folder afterward.
      *
-     * @param folderName  the folder name
-     * @param newRomName  the new rom name
-     * @param removeFiles if this should remove the folder
+     * @param folderPath the folder name
+     * @param newRomPath the new rom name
      *
-     * @throws Throwable if anything wrong happens
+     * @throws IOException if anything wrong happens
      */
-    public static void build(final String folderName, final String newRomName, final boolean removeFiles) throws Throwable {
-        final Path folderPath = Paths.get(folderName);
+    public static void build(final Path folderPath, final Path newRomPath) throws IOException {
         if (!Files.isDirectory(folderPath)) {
-            throw new IllegalArgumentException("No folder for this rom name");
+            throw new IOException("No folder for this rom name");
         }
+        final String newRomPathString = newRomPath.toAbsolutePath().toString();
+        final String folderPathString = folderPath.toAbsolutePath().toString();
         final String[] args = new String[] {
-            "-c", '"' + newRomName + '"',
-            "-9", '"' + folderName + "/arm9.bin" + '"',
-            "-7", '"' + folderName + "/arm7.bin" + '"',
-            "-y9", '"' + folderName + "/y9.bin" + '"',
-            "-y7", '"' + folderName + "/y7.bin" + '"',
-            "-d", '"' + folderName + "/data" + '"',
-            "-y", '"' + folderName + "/overlay" + '"',
-            "-t", '"' + folderName + "/banner.bin" + '"',
-            "-h", '"' + folderName + "/header.bin" + '"'
+            "-c", '"' + newRomPathString + '"',
+            "-9", '"' + folderPathString + "/arm9.bin" + '"',
+            "-7", '"' + folderPathString + "/arm7.bin" + '"',
+            "-y9", '"' + folderPathString + "/y9.bin" + '"',
+            "-y7", '"' + folderPathString + "/y7.bin" + '"',
+            "-d", '"' + folderPathString + "/data" + '"',
+            "-y", '"' + folderPathString + "/overlay" + '"',
+            "-t", '"' + folderPathString + "/banner.bin" + '"',
+            "-h", '"' + folderPathString + "/header.bin" + '"'
         };
         try {
             if (!NdsTool.ndstool(args)) {
-                throw new RuntimeException("Failed to build " + newRomName + " using " + folderName + ": NDSTool failed");
+                throw new IOException("Failed to build " + newRomPathString + " using " + folderPathString + ": NDSTool failed");
             }
         } finally {
-            if (removeFiles) {
-                FileUtils.deleteDirectory(folderPath.toFile());
-            }
+            FileUtils.deleteDirectory(folderPath.toFile());
         }
     }
 }

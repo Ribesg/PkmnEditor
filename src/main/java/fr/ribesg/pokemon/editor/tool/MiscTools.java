@@ -26,7 +26,7 @@ public final class MiscTools {
             pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
             pb.redirectError(ProcessBuilder.Redirect.INHERIT);
         }
-        Log.debug("Running command: " + pb.command().stream().reduce((a, b) -> a + ' ' + b).get());
+        Log.debug("Running command: " + pb.command().get(0).replaceAll(".+/", ""));
         final Process p = pb.start();
         final int res = p.waitFor();
         return res == 0;
