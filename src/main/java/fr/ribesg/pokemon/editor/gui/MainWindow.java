@@ -71,6 +71,7 @@ public final class MainWindow {
                 this.fileMenu.add(this.fileMenuOpen);
 
                 this.fileMenuSaveAs = new JMenuItem(this.context.getLang().get("ui_menu_file_save"));
+                this.fileMenuSaveAs.setEnabled(false);
                 this.fileMenuSaveAs.addActionListener(this::fileSaveAsAction);
                 this.fileMenu.add(this.fileMenuSaveAs);
 
@@ -217,7 +218,6 @@ public final class MainWindow {
 
     private void noRomLock() {
         this.setContentEnabled(this.content, false);
-        this.fileMenuSaveAs.setEnabled(false);
     }
 
     private void noRomUnlock() {
