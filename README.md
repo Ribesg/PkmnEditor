@@ -1,6 +1,5 @@
 # PkmnEditor
-Some ROM hacking tool to edit Pokemon HG Fra roms (for now, eventually all HG/SS roms later).
 
-Still trying to get some starting point to work: editing starters.
+Pokemon HG/SS Hacking Tool. Supports all clean ROMs (EUR, FRA, GER, ITA, JAP, KOR, SPA, USA).
 
-I'm testing with ROM `4786 - Pokémon Version Or: HeartGold (FRA) (1024Mbit) (DiPLODOCUS)`.
+Allows modifying the 3 starters.
