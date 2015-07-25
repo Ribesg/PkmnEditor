@@ -66,14 +66,25 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>2.3</version>
-            <configuration>
-               <artifactSet>
-                  <include>commons-io:commons-io</include>
-                  <include>com.google.guava:guava</include>
-                  <include>com.jgoodies:*</include>
-               </artifactSet>
-            </configuration>
+            <version>2.4</version>
+            <executions>
+               <execution>
+                  <phase>package</phase>
+                  <goals>
+                     <goal>shade</goal>
+                  </goals>
+                  <configuration>
+                     <artifactSet>
+                        <includes>
+                           <include>commons-io:commons-io</include>
+                           <include>com.google.guava:guava</include>
+                           <include>com.jgoodies:*</include>
+                           <include>javax.swing:*</include>
+                        </includes>
+                     </artifactSet>
+                  </configuration>
+               </execution>
+            </executions>
          </plugin>
       </plugins>
    </build>
