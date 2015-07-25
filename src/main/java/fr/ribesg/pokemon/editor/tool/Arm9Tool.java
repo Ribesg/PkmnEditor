@@ -92,6 +92,41 @@ public final class Arm9Tool {
     }
 
     /**
+     * Fixes an extracted arm9.bin file.
+     *
+     * @param offset   the offset of the pointer which should be set to null
+     * @param arm9Path the arm9.bin file path
+     *
+     * @throws IOException if some I/O goes wrong
+     */
+    public static void fixArm9(final int offset, final Path arm9Path) throws IOException {
+        final ByteBuffer arm9 = ByteBuffer.wrap(Files.readAllBytes(arm9Path)).order(ByteOrder.LITTLE_ENDIAN);
+        if (Log.isDebugEnabled()) {
+            Log.debug("Magic fix applied at 0x" + String.format("%08X", offset));
+        }
+        arm9.putInt(offset, 0);
+        Files.write(arm9Path, arm9.array());
+    }
+
+    /**
+     * Finds the offset of the pointer which should be set to null in a
+     * decompressed arm9.bin file.
+     *
+     * @param romPath  the rom path the arm9.bin file was extracted from
+     * @param arm9Path the arm9.bin file path
+     *
+     * @return the offset of the pointer which should be set to null
+     */
+    public static int findMagicOffset(final Path romPath, final Path arm9Path) throws IOException {
+        final Rom rom = new Rom(romPath);
+        rom.load();
+        final int arm9Ram = rom.getInt(Rom.ARM9_RAM);
+        final int arm9EntryPoint = rom.getInt(Rom.ARM9_ENTRY);
+        final ByteBuffer arm9 = ByteBuffer.wrap(Files.readAllBytes(arm9Path)).order(ByteOrder.LITTLE_ENDIAN);
+        return Arm9Tool.findMagicOffset(arm9, arm9Ram, arm9EntryPoint);
+    }
+
+    /**
      * Fixes that arm9.bin content data.
      *
      * @param arm9Content     the uncompressed arm9.bin file content
@@ -99,6 +134,27 @@ public final class Arm9Tool {
      * @param arm9EntryPoint  first arm9 instruction executed by the DS
      */
     private static void fixUncompressedArm9(final ByteBuffer arm9Content, final int arm9RamLocation, final int arm9EntryPoint) {
+        final int pos = Arm9Tool.findMagicOffset(arm9Content, arm9RamLocation, arm9EntryPoint);
+        if (pos < 0) {
+            throw new RuntimeException("Not found :-/");
+        }
+        if (Log.isDebugEnabled()) {
+            Log.debug("Magic fix applied at 0x" + String.format("%08X", pos));
+        }
+        arm9Content.putInt(pos, 0);
+    }
+
+    /**
+     * Finds the offset of the pointer which should be set to null in a
+     * decompressed arm9.bin file.
+     *
+     * @param arm9Content     the uncompressed arm9.bin file content
+     * @param arm9RamLocation location where the arm9.bin file is loaded by DS
+     * @param arm9EntryPoint  first arm9 instruction executed by the DS
+     *
+     * @return the offset of the pointer which should be set to null
+     */
+    private static int findMagicOffset(final ByteBuffer arm9Content, final int arm9RamLocation, final int arm9EntryPoint) {
         int i, j, destPos, structPos, structOffset, pos = -1, res = -1;
 
         final int startSearchIndex = arm9EntryPoint - arm9RamLocation;
@@ -136,19 +192,12 @@ public final class Arm9Tool {
                         structOffset = arm9Content.getInt(i - 4) & 0xFFF;
 
                         res = structPos + structOffset;
+                        break;
                     }
                 }
             }
         }
-
-        if (res < 0) {
-            throw new RuntimeException("Not found :-/");
-        }
-        if (Log.isDebugEnabled()) {
-            // Should be 0x00000BB4 for Pokemon HG Fra
-            Log.debug("Magic fix applied at 0x" + String.format("%08X", res));
-        }
-        arm9Content.putInt(res, 0);
+        return res;
     }
 
     /**

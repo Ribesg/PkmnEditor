@@ -58,7 +58,7 @@ public final class MainWindow {
             Log.error("Failed to set Look&Feel", e);
         }
 
-        this.main = new JFrame("PkmnEditor");
+        this.main = new JFrame(PomData.NAME + " - Version " + PomData.VERSION);
         this.main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Menu

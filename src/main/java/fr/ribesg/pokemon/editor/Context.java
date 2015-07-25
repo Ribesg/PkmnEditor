@@ -61,7 +61,7 @@ public final class Context {
                 return false;
             }
             try {
-                Arm9Tool.fixArm9(this.romPath, arm9Path);
+                Arm9Tool.fixArm9(this.offsets.getMagicFix(), arm9Path);
             } catch (final IOException e) {
                 Log.error("Failed to fix arm9.bin", e);
                 return false;
@@ -95,7 +95,7 @@ public final class Context {
             switch (this.rom.getGameTitle()) {
                 case "POKEMON HG":
                 case "POKEMON SS":
-                    this.loadOffsets(this.rom.getGameTitle(), this.rom.getGameCode());
+                    this.loadOffsets(this.rom);
                     break;
                 default:
                     throw new IOException("Invalid game");
@@ -109,15 +109,57 @@ public final class Context {
         }
     }
 
-    private void loadOffsets(final String gameTitle, final String gameCode) throws IOException {
-        final String prefix = gameTitle.substring(8);
+    private void loadOffsets(final Rom rom) throws IOException {
+        final String prefix = rom.getGameTitle().substring(8);
         final String suffix;
-        switch (gameCode.charAt(7)) {
-            case 'F':
-                suffix = "FRA";
-                break;
-            default:
-                throw new IOException("Unsupported rom lang: " + gameCode.charAt(7));
+        final int headCrc = rom.getInt(Rom.HEADER_CHECKSUM);
+        try {
+            switch (rom.getGameCode().charAt(7)) {
+                case 'D':
+                    assert headCrc == 0x34DA || headCrc == 0x972D
+                        : "Invalid ROM header checksum";
+                    suffix = "GER";
+                    break;
+                case 'E':
+                    // Damn EUR and USA roms having same code :-/
+                    if (0x161F == headCrc || 0xA6CB == headCrc) {
+                        suffix = "EUR";
+                    } else if (0xD061 == headCrc || 0x60B5 == headCrc) {
+                        suffix = "USA";
+                    } else {
+                        throw new IOException("Unknown rom!");
+                    }
+                    break;
+                case 'F':
+                    assert headCrc == 0x4291 || headCrc == 0x4D6A
+                        : "Invalid ROM header checksum";
+                    suffix = "FRA";
+                    break;
+                case 'I':
+                    assert headCrc == 0xF7F6 || headCrc == 0x9D01
+                        : "Invalid ROM header checksum";
+                    suffix = "ITA";
+                    break;
+                case 'J':
+                    assert headCrc == 0x09FB || headCrc == 0xC360
+                        : "Invalid ROM header checksum";
+                    suffix = "JAP";
+                    break;
+                case 'K':
+                    assert headCrc == 0xC645 || headCrc == 0xD817
+                        : "Invalid ROM header checksum";
+                    suffix = "KOR";
+                    break;
+                case 'S':
+                    assert headCrc == 0x68BA || headCrc == 0xAC63
+                        : "Invalid ROM header checksum";
+                    suffix = "SPA";
+                    break;
+                default:
+                    throw new IOException("Unsupported rom lang: " + rom.getGameCode().charAt(7));
+            }
+        } catch (final AssertionError e) {
+            throw new IOException(e.getMessage(), e);
         }
         this.offsets = new Offsets(prefix + '_' + suffix);
     }

@@ -58,8 +58,9 @@ public final class Log {
                     this.reportError(null, e, ErrorManager.FORMAT_FAILURE);
                     return;
                 }
-
-                textArea.append(msg);
+                if (textArea.isValid()) {
+                    textArea.append(msg);
+                }
             }
         });
     }

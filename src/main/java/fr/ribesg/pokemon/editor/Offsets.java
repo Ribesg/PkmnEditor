@@ -8,6 +8,7 @@ import java.util.Properties;
  */
 public final class Offsets {
 
+    private int magicFix;
     private int starters;
 
     public Offsets(final String romKey) throws IOException {
@@ -17,11 +18,20 @@ public final class Offsets {
         props.load(this.getClass().getClassLoader().getResourceAsStream(resourceName));
 
         try {
+            this.setMagicFix(props);
             this.setStarters(props);
             // Here goes other offsets
         } catch (final IOException e) {
             throw new IOException("Malformed file " + resourceName, e);
         }
+    }
+
+    public int getMagicFix() {
+        return this.magicFix;
+    }
+
+    private void setMagicFix(final Properties properties) throws IOException {
+        this.starters = this.fromProps(properties, "MAGIC_FIX");
     }
 
     public int getStarters() {
