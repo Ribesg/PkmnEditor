@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class TextEditorWindow {
 
-    private final JFrame        main;
+    private final JDialog       main;
     private final JList<String> availableTextsList;
     private final JTextArea     editableArea;
 
@@ -25,14 +25,18 @@ public final class TextEditorWindow {
 
     private int previousSelectedIndex = -1;
 
-    public TextEditorWindow(final Context context, final int index) {
+    public TextEditorWindow(final MainWindow main, final Context context, final int index) {
         this.context = context;
         this.index = index;
 
         try {
             this.texts = this.context.getRom().getMessages(index);
 
-            this.main = new JFrame(this.context.getLang().get("ui_textEditor_textEditor", index));
+            this.main = new JDialog(
+                main.main,
+                this.context.getLang().get("ui_textEditor_textEditor", index),
+                true
+            );
             this.main.setLayout(new BorderLayout(5, 5));
 
             final JPanel content = new JPanel();

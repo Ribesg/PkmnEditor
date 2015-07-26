@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
  */
 public final class MainWindow {
 
-    private final JFrame main;
+    /* package */ final JFrame main;
 
     private final JMenu              fileMenu;
     private final JMenuItem          fileMenuOpen;
@@ -408,6 +408,6 @@ public final class MainWindow {
     }
 
     private void editTextAction(final ActionEvent e) {
-        new TextEditorWindow(this.context, this.textNumberComboBox.getSelectedIndex());
+        new TextEditorWindow(this, this.context, this.textNumberComboBox.getSelectedIndex());
     }
 }
