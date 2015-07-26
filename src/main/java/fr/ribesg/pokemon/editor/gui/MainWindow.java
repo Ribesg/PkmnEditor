@@ -196,14 +196,17 @@ public final class MainWindow {
     }
 
     private void setTexts() {
-        this.fileMenu.setText(this.context.getLang().get("ui_menu_file"));
-        this.fileMenuOpen.setText(this.context.getLang().get("ui_menu_file_load"));
-        this.fileMenuSaveAs.setText(this.context.getLang().get("ui_menu_file_save"));
-        this.fileMenuQuit.setText(this.context.getLang().get("ui_menu_file_quit"));
-        this.langMenu.setText(this.context.getLang().get("ui_menu_lang"));
-        this.langMenuEn.setText(this.context.getLang().get("ui_menu_lang_en"));
-        this.langMenuFr.setText(this.context.getLang().get("ui_menu_lang_fr"));
-        this.startersTitledBorder.setTitle(this.context.getLang().get("ui_main_startersEditor"));
+        final Lang lang = this.context.getLang();
+        this.fileMenu.setText(lang.get("ui_menu_file"));
+        this.fileMenuOpen.setText(lang.get("ui_menu_file_load"));
+        this.fileMenuSaveAs.setText(lang.get("ui_menu_file_save"));
+        this.fileMenuQuit.setText(lang.get("ui_menu_file_quit"));
+        this.langMenu.setText(lang.get("ui_menu_lang"));
+        this.langMenuEn.setText(lang.get("ui_menu_lang_en"));
+        this.langMenuFr.setText(lang.get("ui_menu_lang_fr"));
+        this.startersTitledBorder.setTitle(lang.get("ui_main_startersEditor"));
+        this.textTitledBorder.setTitle(lang.get("ui_main_textEdition"));
+        this.editTextButton.setText(lang.get("ui_main_textEditButton"));
         this.fillStartersComboBoxes();
     }
 
@@ -220,9 +223,9 @@ public final class MainWindow {
         });
         final int[] starters = this.context.getStarters();
         if (starters != null) {
-            this.starter1ComboBox.setSelectedIndex(starters[0]);
-            this.starter2ComboBox.setSelectedIndex(starters[1]);
-            this.starter3ComboBox.setSelectedIndex(starters[2]);
+            this.starter1ComboBox.setSelectedIndex(starters[0] - 1);
+            this.starter2ComboBox.setSelectedIndex(starters[1] - 1);
+            this.starter3ComboBox.setSelectedIndex(starters[2] - 1);
         }
     }
 
@@ -368,6 +371,8 @@ public final class MainWindow {
                 Thread.sleep(750);
             } catch (final InterruptedException ignored) {
             }
+            this.main.setVisible(false);
+            this.main.dispose();
             System.exit(0);
         });
     }

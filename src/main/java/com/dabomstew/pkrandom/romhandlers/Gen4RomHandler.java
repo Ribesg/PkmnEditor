@@ -2817,6 +2817,9 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
         if (this.messages == null) {
             this.messages = this.getStrings(802);
         }
+        if (type == null) {
+            return null;
+        }
         switch (type) {
             case DARK:
                 return this.messages.get(47);
@@ -2858,42 +2861,22 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
     }
 
     private void fixStartersText(final List<Pokemon> oldStarters, final List<Pokemon> starters) {
-        /*
-		List<String> spStrings = getStrings(romEntry
-		.getInt("StarterScreenTextOffset"));
-		String[] intros = new String[] { "So, you like", "You’ll take",
-		"Do you want" };
-		for (int i = 0; i < 3; i++) {
-		Pokemon newStarter = newStarters.get(i);
-		int color = (i == 0) ? 3 : i;
-		String newStarterDesc = "Professor Elm: " + intros[i]
-		+ " \\vFF00\\z000" + color + newStarter.name
-		+ "\\vFF00\\z0000,\\nthe "
-		+ newStarter.primaryType.camelCase()
-		+ "-type Pokémon?";
-		spStrings.set(i + 1, newStarterDesc);
-		String altStarterDesc = "\\vFF00\\z000" + color
-		+ newStarter.name + "\\vFF00\\z0000, the "
-		+ newStarter.primaryType.camelCase()
-		+ "-type Pokémon, is\\nin this Poké Ball!";
-		spStrings.set(i + 4, altStarterDesc);
-		}
-		setStrings(romEntry.getInt("StarterScreenTextOffset"),
-		spStrings);
-		*/
-
         final List<String> startersMessages = this.getStrings(190);
+
+        // Change Pokemon names & types
         for (int i = 0; i < 6; i++) {
             final Pokemon oStarter = oldStarters.get(i % 3);
             final Pokemon nStarter = starters.get(i % 3);
             final String oName = oStarter.name;
             final String nName = nStarter.name;
             final String oType1 = this.getTypeName(oStarter.primaryType);
-            final String oType = oType1 + (oStarter.secondaryType != null ? this.getTypeName(oStarter.secondaryType) : "");
+            final String oType2 = this.getTypeName(oStarter.secondaryType);
+            final String oType = oType1 + (oType2 == null ? "" : "/" + oType2);
             String nType = this.getTypeName(nStarter.primaryType);
             if (nStarter.secondaryType != null) {
                 nType += '/' + this.getTypeName(nStarter.secondaryType);
             }
+            assert oType1 != null && nType != null; // Prevent IDE warning
             String message = startersMessages.get(i + 1);
             message = message.replace(oName, nName);
             if (message.contains(oType)) {
@@ -2902,6 +2885,30 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                 message = message.replace(oType1, nType);
             }
             startersMessages.set(i + 1, message);
+        }
+
+        // Fix wrapping
+        for (int i = 1; i <= 6; i++) {
+            final String message = startersMessages.get(i).replace("\\n", " ");
+            final StringBuilder newMessageBuilder = new StringBuilder();
+            int count = 0;
+            for (int j = 0; j < message.length(); j++) {
+                if (message.charAt(j) == '\\') {
+                    newMessageBuilder.append(message.substring(j, j + 6));
+                    j += 5;
+                } else {
+                    newMessageBuilder.append(message.charAt(j));
+                    count++;
+                    if (count > 40) {
+                        final int lastSpace = newMessageBuilder.lastIndexOf(" ");
+                        newMessageBuilder.setCharAt(lastSpace, '\\');
+                        newMessageBuilder.insert(lastSpace + 1, 'n');
+                        newMessageBuilder.append(message.substring(j+1));
+                        break;
+                    }
+                }
+            }
+            startersMessages.set(i, newMessageBuilder.toString());
         }
         this.setStrings(190, startersMessages);
     }
