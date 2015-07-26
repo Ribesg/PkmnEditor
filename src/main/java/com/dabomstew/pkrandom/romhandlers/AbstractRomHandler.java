@@ -2693,33 +2693,33 @@ public abstract class AbstractRomHandler implements RomHandler {
 	/* Helper methods used by subclasses */
 
 	protected void log(String log) {
-		Log.info(log);
+		Log.debug(log);
 	}
 
 	protected void logBlankLine() {
-		Log.info("");
+		Log.debug("");
 	}
 
 	protected void logEvoChangeLevel(String pkFrom, String pkTo, int level) {
-		Log.info(String.format("Made %s evolve into %s at level %d",
+		Log.debug(String.format("Made %s evolve into %s at level %d",
                                pkFrom, pkTo, level));
 	}
 
 	protected void logEvoChangeLevelWithItem(String pkFrom, String pkTo,
 			String itemName) {
-        Log.info(String.format(
+        Log.debug(String.format(
                 "Made %s evolve into %s by leveling up holding %s", pkFrom,
                 pkTo, itemName));
 	}
 
 	protected void logEvoChangeStone(String pkFrom, String pkTo, String itemName) {
-        Log.info(String.format("Made %s evolve into %s using a %s",
+        Log.debug(String.format("Made %s evolve into %s using a %s",
                                pkFrom, pkTo, itemName));
 	}
 
 	protected void logEvoChangeLevelWithPkmn(String pkFrom, String pkTo,
 			String otherRequired) {
-        Log.info(String.format(
+        Log.debug(String.format(
                 "Made %s evolve into %s by leveling up with %s in the party",
                 pkFrom, pkTo, otherRequired));
 	}
