@@ -8,12 +8,14 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.Enumeration;
 import java.util.stream.IntStream;
 
 /**
@@ -54,6 +56,14 @@ public final class MainWindow {
         try {
             Plastic3DLookAndFeel.setCurrentTheme(new ExperienceRoyale());
             UIManager.setLookAndFeel(new Plastic3DLookAndFeel());
+            final Enumeration keys = UIManager.getLookAndFeelDefaults().keys();
+            while (keys.hasMoreElements()) {
+                final Object key = keys.nextElement();
+                final Object value = UIManager.get(key);
+                if (value != null && value instanceof FontUIResource) {
+                    UIManager.put(key, Constants.FONT);
+                }
+            }
         } catch (final Exception e) {
             Log.error("Failed to set Look&Feel", e);
         }
@@ -107,7 +117,7 @@ public final class MainWindow {
                 {
                     startersPanel.setLayout(new BoxLayout(startersPanel, BoxLayout.X_AXIS));
                     this.startersTitledBorder = BorderFactory.createTitledBorder(
-                        this.context.getLang().get("ui_content_startersEditor")
+                        this.context.getLang().get("ui_main_startersEditor")
                     );
                     startersPanel.setBorder(BorderFactory.createCompoundBorder(
                         this.startersTitledBorder,
@@ -131,7 +141,7 @@ public final class MainWindow {
                 {
                     textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.X_AXIS));
                     this.textTitledBorder = BorderFactory.createTitledBorder(
-                        "Text Editor"
+                        this.context.getLang().get("ui_main_textEdition")
                     );
                     textPanel.setBorder(BorderFactory.createCompoundBorder(
                         this.textTitledBorder,
@@ -143,12 +153,12 @@ public final class MainWindow {
                     this.textNumberComboBox.setPreferredSize(new Dimension(45, 22));
                     textPanel.add(this.textNumberComboBox);
 
-                    this.editTextButton = new JButton("Edit");
+                    this.editTextButton = new JButton(this.context.getLang().get("ui_main_textEditButton"));
                     this.editTextButton.setEnabled(false);
                     this.editTextButton.addActionListener(this::editTextAction);
                     textPanel.add(this.editTextButton);
                 }
-                //this.content.add(textPanel);
+                this.content.add(textPanel);
             }
             contentContainer.add(this.content);
 
@@ -193,7 +203,7 @@ public final class MainWindow {
         this.langMenu.setText(this.context.getLang().get("ui_menu_lang"));
         this.langMenuEn.setText(this.context.getLang().get("ui_menu_lang_en"));
         this.langMenuFr.setText(this.context.getLang().get("ui_menu_lang_fr"));
-        this.startersTitledBorder.setTitle(this.context.getLang().get("ui_content_startersEditor"));
+        this.startersTitledBorder.setTitle(this.context.getLang().get("ui_main_startersEditor"));
         this.fillStartersComboBoxes();
     }
 
@@ -377,7 +387,9 @@ public final class MainWindow {
         } catch (final Exception ex) {
             JOptionPane.showMessageDialog(this.main, "Failed: " + ex.getMessage());
         }
+        this.updatingInterface = true;
         this.setTexts();
+        this.updatingInterface = false;
     }
 
     private void startersEditAction(final ActionEvent e) {
@@ -391,6 +403,6 @@ public final class MainWindow {
     }
 
     private void editTextAction(final ActionEvent e) {
-
+        new TextEditorWindow(this.context, this.textNumberComboBox.getSelectedIndex());
     }
 }

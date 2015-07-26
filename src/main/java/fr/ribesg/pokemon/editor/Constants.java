@@ -1,5 +1,6 @@
 package fr.ribesg.pokemon.editor;
 
+import java.awt.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -10,11 +11,16 @@ public final class Constants {
 
     public static final Path   TMP_PATH;
     public static final String JAR_PATH;
+    public static final Font   FONT;
 
     static {
         try {
+            final Class<?> clazz = Constants.class;
             TMP_PATH = Paths.get(System.getProperty("java.io.tmpdir"));
-            JAR_PATH = Constants.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            JAR_PATH = clazz.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            final Font font = Font.createFont(Font.TRUETYPE_FONT, clazz.getResourceAsStream("/NotoSans-Regular.ttf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+            FONT = font.deriveFont(Font.PLAIN, 12);
         } catch (final Throwable t) {
             throw new RuntimeException(t);
         }
