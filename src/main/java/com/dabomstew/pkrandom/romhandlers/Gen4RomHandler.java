@@ -2899,7 +2899,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
                 } else {
                     newMessageBuilder.append(message.charAt(j));
                     count++;
-                    if (count > 40) {
+                    if (count > 38) {
                         final int lastSpace = newMessageBuilder.lastIndexOf(" ");
                         newMessageBuilder.setCharAt(lastSpace, '\\');
                         newMessageBuilder.insert(lastSpace + 1, 'n');
