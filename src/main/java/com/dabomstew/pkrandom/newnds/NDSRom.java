@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.dabomstew.pkrandom.RomFunctions;
-import com.dabomstew.pkrandom.gui.RandomizerGUI;
 
 import cuecompressors.BLZCoder;
 
@@ -68,11 +68,11 @@ public class NDSRom {
 				+ rawFilename.substring(0, rawFilename.lastIndexOf('.'));
 		// remove nonsensical chars
 		dataFolder = dataFolder.replaceAll("[^A-Za-z0-9_]+", "");
-		File tmpFolder = new File(RandomizerGUI.getRootPath() + dataFolder);
-		tmpFolder.mkdir();
+		File tmpFolder = Files.createTempDirectory("PkmnEditor").resolve(dataFolder).toFile();
+        tmpFolder.mkdir();
 		if (tmpFolder.canWrite()) {
 			writingEnabled = true;
-			this.tmpFolder = RandomizerGUI.getRootPath() + dataFolder
+			this.tmpFolder = tmpFolder.getAbsolutePath()
 					+ File.separator;
 			tmpFolder.deleteOnExit();
 		} else {
