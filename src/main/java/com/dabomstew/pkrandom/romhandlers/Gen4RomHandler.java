@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import thenewpoketext.PokeTextData;
 import thenewpoketext.TextToPoke;
 
@@ -625,6 +627,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 				return false;
 			}
 		}
+        final List<Pokemon> oldStarters = this.getStarters();
 		if (romEntry.romType == Type_HGSS) {
 			List<Integer> tailOffsets = RomFunctions.search(arm9, new byte[] {
 					0x03, 0x03, 0x1A, 0x12, 0x1, 0x23, 0x0, 0x0 });
@@ -674,7 +677,8 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 					}
 				}
 				// Fix starter text
-				List<String> spStrings = getStrings(romEntry
+				this.fixStartersText(oldStarters, newStarters);
+/*				List<String> spStrings = getStrings(romEntry
 						.getInt("StarterScreenTextOffset"));
 				String[] intros = new String[] { "So, you like", "You’ll take",
 						"Do you want" };
@@ -695,7 +699,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 				}
 				setStrings(romEntry.getInt("StarterScreenTextOffset"),
 						spStrings);
-				return true;
+*/				return true;
 			} else {
 				return false;
 			}
@@ -834,7 +838,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 							.getInt("StarterLocationTextOffset"));
 					lakeStrings
 							.set(19,
-									"\\v0103\\z0000: Fwaaah!\\nYour Pokémon totally rocked!\\rBut mine was way tougher\\nthan yours!\\r...They were other people’s\\nPokémon, though...\\rBut we had to use them...\\nThey won’t mind, will they?\\r");
+                                 "\\v0103\\z0000: Fwaaah!\\nYour Pokémon totally rocked!\\rBut mine was way tougher\\nthan yours!\\r...They were other people’s\\nPokémon, though...\\rBut we had to use them...\\nThey won’t mind, will they?\\r");
 					setStrings(romEntry.getInt("StarterLocationTextOffset"),
 							lakeStrings);
 				} else {
@@ -843,7 +847,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 							.getInt("StarterLocationTextOffset"));
 					r201Strings
 							.set(36,
-									"\\v0103\\z0000\\z0000: Then, I choose you!\\nI’m picking this one!\\r");
+                                 "\\v0103\\z0000\\z0000: Then, I choose you!\\nI’m picking this one!\\r");
 					setStrings(romEntry.getInt("StarterLocationTextOffset"),
 							r201Strings);
 				}
@@ -1954,8 +1958,8 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 				// Rewrite 5-line move descs into 3-line item descs
 				itemDescriptions.set(i + 328, RomFunctions
 						.rewriteDescriptionForNewLineSize(
-								moveDescriptions.get(moveIndexes.get(i)),
-								"\\n", 40, ssd));
+                            moveDescriptions.get(moveIndexes.get(i)),
+                            "\\n", 40, ssd));
 			}
 			// Save the new item descriptions
 			setStrings(romEntry.getInt("ItemDescriptionsTextOffset"),
@@ -2800,9 +2804,118 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 			// can't do anything
 		}
 	}
-	
+
 	@Override
 	public boolean supportsFourStartingMoves() {
 		return true;
 	}
+
+    // Additions by Ribesg below
+    private List<String> messages;
+
+    private String getTypeName(final Type type) {
+        if (this.messages == null) {
+            this.messages = this.getStrings(802);
+        }
+        switch (type) {
+            case DARK:
+                return this.messages.get(47);
+            case ROCK:
+                return this.messages.get(48);
+            case PSYCHIC:
+                return this.messages.get(49);
+            case FIGHTING:
+                return this.messages.get(50);
+            case GRASS:
+                return this.messages.get(51);
+            case ICE:
+                return this.messages.get(52);
+            case GHOST:
+                return this.messages.get(53);
+            case GROUND:
+                return this.messages.get(54);
+            case ELECTRIC:
+                return this.messages.get(55);
+            case POISON:
+                return this.messages.get(56);
+            case DRAGON:
+                return this.messages.get(57);
+            case NORMAL:
+                return this.messages.get(58);
+            case STEEL:
+                return this.messages.get(59);
+            case FLYING:
+                return this.messages.get(60);
+            case FIRE:
+                return this.messages.get(61);
+            case WATER:
+                return this.messages.get(62);
+            case BUG:
+                return this.messages.get(63);
+            default:
+                return type.camelCase();
+        }
+    }
+
+    private void fixStartersText(final List<Pokemon> oldStarters, final List<Pokemon> starters) {
+        /*
+		List<String> spStrings = getStrings(romEntry
+		.getInt("StarterScreenTextOffset"));
+		String[] intros = new String[] { "So, you like", "You’ll take",
+		"Do you want" };
+		for (int i = 0; i < 3; i++) {
+		Pokemon newStarter = newStarters.get(i);
+		int color = (i == 0) ? 3 : i;
+		String newStarterDesc = "Professor Elm: " + intros[i]
+		+ " \\vFF00\\z000" + color + newStarter.name
+		+ "\\vFF00\\z0000,\\nthe "
+		+ newStarter.primaryType.camelCase()
+		+ "-type Pokémon?";
+		spStrings.set(i + 1, newStarterDesc);
+		String altStarterDesc = "\\vFF00\\z000" + color
+		+ newStarter.name + "\\vFF00\\z0000, the "
+		+ newStarter.primaryType.camelCase()
+		+ "-type Pokémon, is\\nin this Poké Ball!";
+		spStrings.set(i + 4, altStarterDesc);
+		}
+		setStrings(romEntry.getInt("StarterScreenTextOffset"),
+		spStrings);
+		*/
+
+        final List<String> startersMessages = this.getStrings(190);
+        for (int i = 0; i < 6; i++) {
+            final Pokemon oStarter = oldStarters.get(i % 3);
+            final Pokemon nStarter = starters.get(i % 3);
+            final String oName = oStarter.name;
+            final String nName = nStarter.name;
+            final String oType1 = this.getTypeName(oStarter.primaryType);
+            final String oType = oType1 + (oStarter.secondaryType != null ? this.getTypeName(oStarter.secondaryType) : "");
+            String nType = this.getTypeName(nStarter.primaryType);
+            if (nStarter.secondaryType != null) {
+                nType += '/' + this.getTypeName(nStarter.secondaryType);
+            }
+            String message = startersMessages.get(i + 1);
+            message = message.replace(oName, nName);
+            if (message.contains(oType)) {
+                message = message.replace(oType, nType);
+            } else {
+                message = message.replace(oType1, nType);
+            }
+            startersMessages.set(i + 1, message);
+        }
+        this.setStrings(190, startersMessages);
+    }
+
+    public int getMessageFilesAmount() {
+        return this.msgNarc.files.size();
+    }
+
+    public Pair<List<String>, Boolean> getMessages(final int index) {
+        final List<String> res = this.getStrings(index);
+        return new ImmutablePair<>(res, this.lastStringsCompressed);
+    }
+
+    public void setMessages(final int index, final List<String> messages, final boolean compressed) {
+        this.setStrings(index, messages, compressed);
+    }
 }

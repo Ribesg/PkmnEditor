@@ -82,4 +82,12 @@ public final class MiscTools {
         System.arraycopy(args, 0, newArgs, 1, args.length);
         return newArgs;
     }
+
+    public static String asHex(final int val) {
+        return "0x" + Integer.toHexString(val).toUpperCase();
+    }
+
+    public static String asHex(final short val) {
+        return MiscTools.asHex(val & 0xFFFF);
+    }
 }

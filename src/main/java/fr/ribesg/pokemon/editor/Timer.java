@@ -55,7 +55,7 @@ public final class Timer {
         if (nano < 1_000L) {
             return nano + "ns";
         } else if (nano < 1_000_000L) {
-            return Timer.getFormatter().format(nano / 1_000D) + "µs";
+            return Timer.getFormatter().format(nano / 1_000D) + "Âµs";
         } else if (nano < 1_000_000_000L) {
             return Timer.getFormatter().format(nano / 1_000_000D) + "ms";
         } else if (nano < 60_000_000_000L) {

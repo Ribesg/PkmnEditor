@@ -79,10 +79,12 @@ public final class Log {
 
     public static void error(final Object message) {
         Log.LOGGER.log(Level.SEVERE, message.toString());
+        Log.flush();
     }
 
     public static void error(final Object message, final Throwable t) {
         Log.LOGGER.log(Level.SEVERE, message.toString(), t);
+        Log.flush();
     }
 
     public static void flush() {
