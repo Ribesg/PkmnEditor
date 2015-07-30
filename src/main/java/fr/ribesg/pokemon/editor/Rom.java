@@ -2,7 +2,7 @@ package fr.ribesg.pokemon.editor;
 
 import com.dabomstew.pkrandom.pokemon.Pokemon;
 import com.dabomstew.pkrandom.romhandlers.Gen4RomHandler;
-import org.apache.commons.lang3.tuple.Pair;
+import fr.ribesg.pokemon.editor.util.Pair;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,13 +43,16 @@ public final class Rom {
         return this.handler.getStarters().stream().mapToInt(p -> p.number).toArray();
     }
 
-    public void setStarters(final int a, final int b, final int c) {
+    public void setStarters(final int... starters) {
+        assert starters.length == 3;
         this.checkLoaded();
-        this.handler.setStarters(Arrays.asList(
-            this.handler.getPokemon().get(a),
-            this.handler.getPokemon().get(b),
-            this.handler.getPokemon().get(c)
-        ));
+        this.handler.setStarters(
+            Arrays.asList(
+                this.handler.getPokemon().get(starters[0]),
+                this.handler.getPokemon().get(starters[1]),
+                this.handler.getPokemon().get(starters[2])
+            )
+        );
     }
 
     public String getPkmnName(final int num) {

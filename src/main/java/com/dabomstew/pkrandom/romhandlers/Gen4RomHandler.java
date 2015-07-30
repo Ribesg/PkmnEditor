@@ -34,8 +34,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import fr.ribesg.pokemon.editor.util.Pair;
 import thenewpoketext.PokeTextData;
 import thenewpoketext.TextToPoke;
 
@@ -2919,7 +2918,7 @@ public class Gen4RomHandler extends AbstractDSRomHandler {
 
     public Pair<List<String>, Boolean> getMessages(final int index) {
         final List<String> res = this.getStrings(index);
-        return new ImmutablePair<>(res, this.lastStringsCompressed);
+        return new Pair<>(res, this.lastStringsCompressed);
     }
 
     public void setMessages(final int index, final List<String> messages, final boolean compressed) {

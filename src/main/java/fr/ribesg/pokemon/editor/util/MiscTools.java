@@ -1,4 +1,4 @@
-package fr.ribesg.pokemon.editor.tool;
+package fr.ribesg.pokemon.editor.util;
 
 import fr.ribesg.pokemon.editor.Log;
 

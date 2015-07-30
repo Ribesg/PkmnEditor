@@ -19,26 +19,6 @@
          <artifactId>commons-io</artifactId>
          <version>2.4</version>
       </dependency>
-      <dependency>
-         <groupId>org.apache.commons</groupId>
-         <artifactId>commons-lang3</artifactId>
-         <version>3.4</version>
-      </dependency>
-      <dependency>
-         <groupId>com.google.guava</groupId>
-         <artifactId>guava</artifactId>
-         <version>18.0</version>
-      </dependency>
-      <dependency>
-         <groupId>com.jgoodies</groupId>
-         <artifactId>jgoodies-common</artifactId>
-         <version>1.7.0</version>
-      </dependency>
-      <dependency>
-         <groupId>com.jgoodies</groupId>
-         <artifactId>jgoodies-looks</artifactId>
-         <version>2.5.3</version>
-      </dependency>
    </dependencies>
 
    <build>
@@ -126,18 +106,14 @@
                      <artifactSet>
                         <includes>
                            <include>commons-io:commons-io</include>
-                           <include>org.apache.commons:commons-lang3</include>
-                           <include>com.google.guava:guava</include>
-                           <include>com.jgoodies:*</include>
-                           <include>javax.swing:*</include>
                         </includes>
                      </artifactSet>
+                     <minimizeJar>true</minimizeJar>
                   </configuration>
                </execution>
             </executions>
          </plugin>
       </plugins>
    </build>
-
 
 </project>

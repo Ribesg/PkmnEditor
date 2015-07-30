@@ -1,11 +1,10 @@
 package fr.ribesg.pokemon.editor;
 
-import fr.ribesg.pokemon.editor.gui.MainWindow;
-import org.apache.commons.lang3.tuple.Pair;
+import fr.ribesg.pokemon.editor.util.Pair;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Ribesg
@@ -17,7 +16,10 @@ public final class Context {
     private Path romPath;
     private Rom  rom;
 
-    public Context(final MainWindow mainWindow) throws IOException {
+    private int[]                                     starters;
+    private Map<Integer, Pair<List<String>, Boolean>> texts;
+
+    public Context() throws IOException {
         this.lang = new Lang();
 
         this.romPath = null;
@@ -36,10 +38,6 @@ public final class Context {
         return this.romPath;
     }
 
-    public Rom getRom() {
-        return this.rom;
-    }
-
     public boolean loadRom(final Path path) {
         try {
             this.romPath = path;
@@ -54,6 +52,8 @@ public final class Context {
 
     public boolean saveRom(final Path path) {
         try {
+            this.rom.setStarters(this.starters);
+            this.texts.forEach((i, t) -> this.rom.setMessages(i, t.getLeft(), t.getRight()));
             this.rom.save(path);
             return true;
         } catch (final Throwable t) {
@@ -64,7 +64,10 @@ public final class Context {
 
     public int[] getStarters() {
         try {
-            return this.rom.getStarters();
+            if (this.starters == null) {
+                this.starters = this.rom.getStarters();
+            }
+            return this.starters;
         } catch (final Throwable t) {
             Log.error("Failed to set Starters", t);
             return null;
@@ -73,11 +76,46 @@ public final class Context {
 
     public boolean setStarters(final int[] starters) {
         try {
-            this.rom.setStarters(starters[0], starters[1], starters[2]);
+            assert starters.length == 3;
+            this.starters = starters;
             return true;
         } catch (final Throwable t) {
             Log.error("Failed to set Starters", t);
             return false;
+        }
+    }
+
+    public List<String> getTexts(final int index) {
+        try {
+            if (!this.texts.containsKey(index)) {
+                this.texts.put(index, this.rom.getMessages(index));
+            }
+            return new ArrayList<>(this.texts.get(index).getLeft());
+        } catch (final Throwable t) {
+            Log.error("Failed to get Text " + index, t);
+            return null;
+        }
+    }
+
+    public int getTextsAmount() {
+        return this.rom.getMessageFilesAmount();
+    }
+
+    public void setTexts(final int index, final List<String> text) {
+        if (!this.texts.containsKey(index)) {
+            Log.error("Failed to set Text which were not get before: " + index);
+        } else {
+            this.texts.get(index).getLeft().clear();
+            this.texts.get(index).getLeft().addAll(text);
+        }
+    }
+
+    public String[] getPkmnNames() {
+        try {
+            return this.rom.getPkmnNames();
+        } catch (final Throwable t) {
+            Log.error("Failed to get Pkmn Names ", t);
+            return null;
         }
     }
 }

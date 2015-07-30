@@ -1,18 +1,14 @@
 package fr.ribesg.pokemon.editor;
 
-import fr.ribesg.pokemon.editor.gui.MainWindow;
+import fr.ribesg.pokemon.editor.gui.MainApplication;
 
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @author Ribesg
  */
 public final class Main {
-
-    public static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
 
     public static void main(final String[] args) {
         try {
@@ -22,7 +18,7 @@ public final class Main {
             }
 
             if (args.length == 0 || args.length == 1 && Log.isDebugEnabled()) {
-                Main.EXECUTOR.submit(MainWindow::new);
+                MainApplication.launch();
             } else {
                 switch (args[0].toLowerCase()) {
                     case "--dev":
