@@ -1,8 +1,9 @@
 package fr.ribesg.pokemon.editor;
 
+import javafx.scene.control.TextArea;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import java.lang.ref.WeakReference;
 import java.util.logging.*;
 
 /**
@@ -16,7 +17,7 @@ public final class Log {
         Log.LOGGER = Logger.getLogger("PkmnEditor");
         System.setProperty(
             "java.util.logging.SimpleFormatter.format",
-            "%5$s %6$s%n"
+            "%n%5$s %6$s"
         );
         for (final Handler h : Log.LOGGER.getHandlers()) {
             Log.LOGGER.removeHandler(h);
@@ -27,6 +28,8 @@ public final class Log {
                 this.setLevel(Level.ALL);
             }
         });
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> Log.info("")));
     }
 
     public static boolean isDebugEnabled() {
@@ -37,19 +40,21 @@ public final class Log {
         Log.LOGGER.setLevel(value ? Level.ALL : Level.INFO);
     }
 
-    public static void logInto(final JTextArea textArea) {
+    public static void logInto(final TextArea textArea) {
+        final WeakReference<TextArea> weakTextArea = new WeakReference<>(textArea);
         Log.LOGGER.addHandler(new ConsoleHandler() {
 
             {
                 this.setLevel(Level.ALL);
             }
 
+            @SuppressWarnings("ConstantConditions") // WeakReference#get can return null yeah. I know.
             @Override
             public void publish(@NotNull final LogRecord record) {
                 if (!this.isLoggable(record)) {
                     return;
                 }
-                String msg;
+                final String msg;
                 try {
                     msg = this.getFormatter().format(record);
                 } catch (final Exception e) {
@@ -58,8 +63,16 @@ public final class Log {
                     this.reportError(null, e, ErrorManager.FORMAT_FAILURE);
                     return;
                 }
-                if (textArea.isValid()) {
-                    textArea.append(msg);
+
+                try {
+                    final String finalMsg = msg.replaceAll("[\n\r]", "");
+                    if (weakTextArea.get().getText().isEmpty()) {
+                        weakTextArea.get().appendText(finalMsg);
+                    } else {
+                        weakTextArea.get().appendText('\n' + finalMsg);
+                    }
+                } catch (final NullPointerException e) {
+                    Log.LOGGER.removeHandler(this);
                 }
             }
         });

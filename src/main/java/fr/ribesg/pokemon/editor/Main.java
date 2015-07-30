@@ -1,6 +1,7 @@
 package fr.ribesg.pokemon.editor;
 
-import fr.ribesg.pokemon.editor.gui.MainApplication;
+import fr.ribesg.pokemon.editor.model.Rom;
+import fr.ribesg.pokemon.editor.view.MainApp;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -18,7 +19,7 @@ public final class Main {
             }
 
             if (args.length == 0 || args.length == 1 && Log.isDebugEnabled()) {
-                MainApplication.launch();
+                MainApp.launch();
             } else {
                 switch (args[0].toLowerCase()) {
                     case "--dev":

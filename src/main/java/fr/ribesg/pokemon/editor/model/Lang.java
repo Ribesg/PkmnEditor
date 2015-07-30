@@ -1,4 +1,4 @@
-package fr.ribesg.pokemon.editor;
+package fr.ribesg.pokemon.editor.model;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

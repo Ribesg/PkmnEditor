@@ -1,4 +1,4 @@
-package fr.ribesg.pokemon.editor;
+package fr.ribesg.pokemon.editor.model;
 
 import com.dabomstew.pkrandom.pokemon.Pokemon;
 import com.dabomstew.pkrandom.romhandlers.Gen4RomHandler;
