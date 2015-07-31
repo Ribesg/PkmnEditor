@@ -1,5 +1,6 @@
 package fr.ribesg.pokemon.editor.controller;
 
+import fr.ribesg.pokemon.editor.Log;
 import fr.ribesg.pokemon.editor.model.Context;
 import fr.ribesg.pokemon.editor.model.Lang;
 import fr.ribesg.pokemon.editor.view.MainApp;
@@ -18,6 +19,11 @@ public final class MainAppController {
     public MainAppController(final MainApp app) throws IOException {
         this.context = new Context();
         this.app = app;
+    }
+
+    public void appBuilt() {
+        Log.info("Started!");
+        Log.info("First, load a clean HG/SS ROM using File -> Open");
     }
 
     public void loadRom(final File file) {

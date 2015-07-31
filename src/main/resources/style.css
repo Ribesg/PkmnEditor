@@ -1,0 +1,12 @@
+.menu-bar, .context-menu {
+    -fx-padding: 0;
+}
+
+.text-area {
+    -fx-background-color: -fx-background;
+    -fx-border-color: -fx-outer-border transparent transparent transparent;
+}
+
+.text-area .content {
+    -fx-background-color: -fx-background;
+}
