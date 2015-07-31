@@ -54,12 +54,9 @@ public final class Main {
             Log.info(
                 i +
                 " - Trainer{" +
-                "offset=" + t.offset +
-                ", pokemon=" + t.pokemon.size() +
+                ", pokemonAmount=" + t.pokemon.size() +
                 ", tag='" + t.tag + '\'' +
-                ", importantTrainer=" + t.importantTrainer +
                 ", poketype=" + t.poketype +
-                ", name='" + t.name + '\'' +
                 ", trainerclass=" + t.trainerclass +
                 ", fullDisplayName='" + t.fullDisplayName + '\'' +
                 '}'
