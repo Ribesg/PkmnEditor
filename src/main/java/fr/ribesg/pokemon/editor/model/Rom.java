@@ -82,7 +82,7 @@ public final class Rom {
 
     public String getString(String key) {
         final int file, line;
-        int index = -1, subStart = 0, subEnd = -1;
+        int index = -1;
         final String comment;
         if (!key.contains("-")) {
             key = "279-" + key;
@@ -99,12 +99,6 @@ public final class Rom {
         if (split.length > 2) {
             index = Integer.parseInt(split[2]);
         }
-        if (split.length > 3) {
-            subStart = Integer.parseInt(split[3]);
-        }
-        if (split.length > 4) {
-            subEnd = Integer.parseInt(split[4]);
-        }
 
         final String s = this.handler.getMessages(file).getLeft().get(line);
         String res;
@@ -113,11 +107,6 @@ public final class Rom {
         } else {
             final String[] ss = s.split("\\\\n|\\\\r");
             res = ss[index];
-            if (subEnd == -1) {
-                res = res.substring(subStart);
-            } else {
-                res = res.substring(subStart, subEnd);
-            }
         }
         if (comment != null) {
             res += " (" + comment + ')';

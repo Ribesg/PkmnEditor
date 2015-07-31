@@ -469,9 +469,17 @@
   - "287" # Rival Silver
 
 "203": # Iles Ecume
+  - "259" # Champion Auguste
   - "686" # Surfer Mario
   - "687" # Surfer Milo
   - "688" # Skieuse Régine
+  - "689" # Intello Walter
+  - "690" # Intello Yann
+  - "691" # Intello Imram
+  - "692" # Scientifique Omar
+  - "693" # Scientifique Dimitri
+  - "694" # Scientifique Sammy
+  - "726" # Champion Auguste
 
 "204": # Tour CHETIFLOR
   - "043" # Sage Quentin
@@ -694,10 +702,6 @@
   - "035" # Champion Sandra
   - "719" # Champion Sandra
 
-"742-0-3-6": # Arène de Cramois’Ile
-  - "259" # Champion Auguste
-  - "726" # Champion Auguste
-
 "???":
   - "2" # Rival Silver
   - "3" # Rival Silver
@@ -878,12 +882,6 @@
   - "683" # Topdresseur Tiphaine
   - "684" # Duo Ralf&Kate
   - "685" # Montagnard Girome
-  - "689" # Intello Walter
-  - "690" # Intello Yann
-  - "691" # Intello Imram
-  - "692" # Scientifique Omar
-  - "693" # Scientifique Dimitri
-  - "694" # Scientifique Sammy
   - "700" # Boss Rocket Giovanni
   - "707" # Aigle Tour Koner
   - "708" # Lady Scène Célosia
