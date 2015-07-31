@@ -1,0 +1,536 @@
+"127": # Ville Griotte
+  - "495" # Passant Garçon
+  - "496" # Passant Garçon
+  - "497" # Passant Garçon
+
+"130": # Irisia
+  - "498" # Mec Mystère Eusine
+
+"132": # Oliville
+  - "728" # Canon Oriane
+
+"135": # Lac Colère
+  - "109" # Topdresseur Aaron
+  - "116" # Topdresseur Sally
+  - "126" # Pêcheur Panis
+  - "127" # Pêcheur Lucas
+
+"137": # Mont Argenté
+  - "260" # Dresseur Red
+
+"149": # Route 1
+  - "327" # Elève Davon
+  - "362" # Topdresseur Mimi
+  - "545" # Topdresseur Jovan
+  - "546" # Elève Noah
+
+"15/1": # Ligue Pokémon (1)
+  - "244" # Maître Peter
+  - "245" # Conseil 4 Clément
+  - "246" # Conseil 4 Marion
+  - "247" # Conseil 4 Koga
+  - "418" # Conseil 4 Aldo
+
+"150": # Route 2
+  - "048" # Scout Aymeric
+  - "140" # Scout Constantin
+  - "248" # Scout Odilon
+
+"151": # Route 3
+  - "015" # Crache-Feu Otis
+  - "318" # Crache-Feu Akim
+  - "378" # Gamin Romain
+  - "379" # Gamin Eusèbe
+  - "547" # Montagnard Hugo
+  - "548" # Karatéka Timo
+  - "549" # Duo Marc&Sofie
+  - "550" # Karatéka Théo
+  - "551" # Montagnard Luca
+  - "552" # Gamin Luc
+
+"154": # Route 6
+  - "598" # Jumelles Alema&Aya
+  - "599" # Campeur Majid
+  - "600" # Pique-Nique Zora
+
+"156": # Route 8
+  - "309" # Motard Bruno
+  - "310" # Motard Christophe
+  - "311" # Motard Johnny
+  - "364" # Intello Edouard
+  - "365" # Intello Adrien
+  - "553" # Jeune Couple Fred&Buffy
+  - "554" # Gentleman Ernest
+
+"157": # Route 9
+  - "149" # Campeur Jeannot
+  - "150" # Campeur Claude
+  - "234" # Montagnard Urbain
+  - "332" # Pique-Nique Paule
+  - "333" # Pique-Nique Edna
+  - "357" # Montagnard Hervé
+
+"158": # Route 10
+  - "348" # Pokéfan Rob
+  - "359" # Montagnard Albin
+
+"159": # Route 11
+  - "316" # Kinésiste Romuald
+  - "317" # Kinésiste Florent
+  - "380" # Gamin Sancho
+  - "381" # Gamin Mercutio
+
+"160": # Route 12
+  - "059" # Pêcheur Olive
+  - "320" # Pêcheur Pascal
+  - "321" # Pêcheur Simonin
+  - "322" # Pêcheur Yvon
+  - "555" # Ornithologue Théophile
+  - "556" # Ornithologue Guy
+  - "557" # Jeune Couple Rio&Kimber
+  - "558" # Pêcheur Zachary
+
+"161": # Route 13
+  - "349" # Pokéfan Josh
+  - "358" # Montagnard Gilles
+  - "420" # Ornithologue Jeff
+  - "421" # Ornithologue Bret
+  - "492" # Pokéfan Adelin
+  - "559" # Jeune Couple André&Tina
+  - "560" # Campeur Gustave
+  - "561" # Campeur Xavier
+  - "562" # Pique-Nique Chloé
+  - "563" # Pique-Nique Berta
+
+"162": # Route 14
+  - "300" # Ornithologue Mamadou
+  - "350" # Pokéfan Donald
+  - "351" # Pokéfan Arnaut
+  - "564" # Prof Euphrasie
+  - "565" # Ornithologue William
+  - "566" # Elève Julien
+  - "567" # Elève Justin
+  - "568" # Elève Claudius
+
+"163": # Route 15
+  - "038" # Prof Colette
+  - "135" # Elève Nestor
+  - "179" # Elève Cyril
+  - "328" # Elève Tommy
+  - "331" # Elève Bilhal
+  - "382" # Prof Josianne
+  - "569" # Jumelles Nini&Nana
+  - "570" # Pokéfan Iban
+  - "571" # Pokéfan Clémence
+
+"165": # Route 17
+  - "313" # Motard Bernard
+  - "314" # Motard Lorenzo
+  - "315" # Motard Jean-Marc
+  - "572" # Motard Alfonso
+  - "573" # Motard Richie
+  - "574" # Motard Nathan
+  - "575" # Motard Balthazar
+  - "576" # Motard Samson
+  - "577" # Motard Raynaldo
+  - "578" # Motard Cornélius
+  - "579" # Motard Samuel
+
+"166": # Route 18
+  - "301" # Ornithologue Sam
+  - "302" # Ornithologue Bob
+  - "312" # Motard Dick
+
+"167": # Chenal 19
+  - "252" # Nageur Bjon
+  - "291" # Nageuse Teri
+  - "370" # Nageur Jürgen
+  - "371" # Nageur Sergei
+
+"168": # Chenal 20
+  - "293" # Nageuse Stéfie
+  - "294" # Nageuse Sonja
+  - "373" # Nageur Piotr
+  - "580" # Campeur Osric
+  - "581" # Pique-Nique Maëlis
+  - "582" # Pique-Nique Miranda
+  - "583" # Ornithologue Francisco
+  - "584" # Ornithologue Bernardo
+  - "585" # Nageur Enzo
+  - "586" # Nageur Lenaig
+  - "587" # Nageuse Nicky
+  - "588" # Nageuse Paola
+
+"169": # Chenal 21
+  - "058" # Pêcheur Martial
+  - "296" # Nageuse Nikki
+  - "374" # Nageur Stephen
+  - "589" # Pêcheur Aziz
+  - "590" # Pêcheur Albérich
+  - "591" # Pêcheur Benvolio
+  - "592" # Nageuse Soizic
+  - "593" # Nageuse Rozen
+  - "594" # Nageur Trévor
+  - "595" # Nageur Tanguy
+  - "596" # Ornithologue Amin
+  - "597" # Ornithologue Billal
+
+"172": # Route 24
+  - "353" # Rocket Sbire
+
+"173": # Route 25
+  - "148" # Campeur Stéphane
+  - "329" # Elève Benoit
+  - "330" # Elève Joël
+  - "354" # Fillette Laura
+  - "355" # Fillette Diane
+  - "361" # Topdresseur Kevin
+  - "366" # Intello Arthus
+  - "419" # Fillette Gaëlle
+
+"174": # Route 26
+  - "028" # Topdresseur Jack
+  - "036" # Topdresseur Cathy
+  - "102" # Topdresseur Sean
+  - "113" # Topdresseur Carina
+  - "411" # Kinésiste Anselme
+  - "413" # Pêcheur Matéo
+
+"175": # Route 27
+  - "103" # Topdresseur Félix
+  - "104" # Topdresseur Hatem
+  - "114" # Topdresseur Audrey
+  - "115" # Topdresseur Leia
+  - "412" # Kinésiste Nataniel
+  - "414" # Ornithologue Brett
+
+"178": # Route 30
+  - "008" # Gamin Farouk
+  - "047" # Gamin Mandé
+  - "249" # Scout Jean-Raoul
+
+"179": # Route 31
+  - "004" # Scout Francis
+
+"180": # Route 32
+  - "018" # Pêcheur César
+  - "026" # Campeur Raymond
+  - "027" # Pique-Nique Elisabeth
+  - "049" # Gamin Roméo
+  - "056" # Gamin Momo
+  - "057" # Pêcheur Auffray
+  - "060" # Pêcheur Loïc
+  - "383" # Ornithologue Joe
+
+"181": # Route 33
+  - "061" # Montagnard Olwen
+
+"182": # Route 34
+  - "006" # Agent Nicolas
+  - "062" # Gamin Gontran
+  - "064" # Gamin Ian
+  - "065" # Pique-Nique Albertine
+  - "066" # Campeur Matthias
+  - "118" # Topdresseur Irène
+  - "120" # Topdresseur Amy
+  - "409" # Pokéfan Brandon
+  - "417" # Topdresseur Maria
+
+"183": # Route 35
+  - "007" # Jongleur Anthony
+  - "072" # Ornithologue Greg
+  - "074" # Campeur Yvan
+  - "075" # Campeur Amilcar
+  - "076" # Pique-Nique Brooke
+  - "077" # Pique-Nique Kala
+  - "078" # Scout Henri
+  - "080" # Agent Baptiste
+  - "388" # Crache-Feu Bimbo
+
+"184": # Route 36
+  - "024" # Elève Aimé
+  - "395" # Kinésiste Freddy
+
+"185": # Route 37
+  - "081" # Jumelles Lison&Lisa
+  - "386" # Kinésiste Ulrik
+  - "679" # Canon Rafika
+  - "680" # Canon Eulalie
+
+"186": # Route 38
+  - "082" # Ornithologue Toby
+  - "397" # Elève Mathys
+  - "398" # Canon Cléo
+  - "400" # Fillette Rekka
+  - "410" # Marin Isaac
+
+"187": # Route 39
+  - "039" # Marin Jacob
+  - "044" # Pokéfan Djamil
+  - "045" # Pokéfan Tatiana
+  - "389" # Kinésiste Damien
+
+"188": # Chenal 40
+  - "009" # Nageuse Simone
+  - "016" # Nageur Vladimir
+  - "085" # Nageuse Anna
+  - "086" # Nageur Boris
+
+"189": # Chenal 41
+  - "090" # Nageuse Ludmila
+  - "091" # Nageuse Susie
+  - "092" # Nageuse Ute
+  - "093" # Nageuse Birgit
+  - "094" # Nageuse Wendy
+  - "095" # Nageur Helmut
+  - "096" # Nageur Johan
+  - "097" # Nageur Sigmund
+  - "098" # Nageur Otto
+  - "099" # Nageur Matthew
+
+"190": # Route 42
+  - "123" # Pêcheur Conan
+  - "129" # Pokémaniac Seb
+  - "134" # Montagnard Moïse
+
+"191": # Route 43
+  - "122" # Pêcheur Eugène
+  - "130" # Pokémaniac Robert
+  - "131" # Pokémaniac Wilfrid
+  - "132" # Pokémaniac Thomas
+  - "402" # Pique-Nique Flavie
+  - "403" # Campeur Rémi
+
+"192": # Route 44
+  - "124" # Pêcheur Renan
+  - "125" # Pêcheur Marius
+  - "137" # Ornithologue Alban
+  - "405" # Kinésiste Gabriel
+  - "406" # Pokémaniac Franck
+  - "407" # Topdresseur Abib
+  - "408" # Topdresseur Alizée
+
+"193": # Route 45
+  - "017" # Karatéka Jacky
+  - "108" # Topdresseur Jean
+  - "121" # Topdresseur Karin
+  - "143" # Montagnard Juste
+  - "144" # Montagnard Lucien
+  - "145" # Montagnard Noa
+  - "146" # Montagnard Firmin
+
+"194": # Route 46
+  - "147" # Campeur Laurent
+  - "151" # Pique-Nique Erin
+  - "154" # Montagnard Edgar
+
+"195": # Route 47
+  - "729" # Jeune Couple Ludo&Dalia
+  - "730" # Duo Serge&Dom
+  - "731" # Montagnard Gabin
+  - "732" # Campeur Titouan
+
+"198": # Mont Sélénite
+  - "285" # Rival Silver
+  - "286" # Rival Silver
+  - "287" # Rival Silver
+
+"203": # Iles Ecume
+  - "686" # Surfer Mario
+  - "687" # Surfer Milo
+  - "688" # Skieuse Régine
+
+"204": # Tour CHETIFLOR
+  - "043" # Sage Quentin
+  - "051" # Sage Horst
+  - "052" # Sage Briand
+  - "053" # Sage Alfonse
+  - "054" # Sage Batiste
+  - "055" # Sage Achille
+  - "290" # Ancien Jehan
+
+"206": # Tour Cendrée
+  - "263" # Rival Silver
+  - "267" # Rival Silver
+  - "270" # Rival Silver
+  - "281" # Crache-Feu Bilou
+  - "282" # Crache-Feu Pipo
+
+"207": # Parc Naturel
+  - "178" # Elève Timéo
+  - "181" # Pokéfan Marcel
+  - "182" # Pokéfan Jade
+  - "184" # Fillette Jezebel
+
+"208": # Tour Radio
+  - "185" # Rocket Sbire
+  - "186" # Rocket Sbire
+  - "187" # Rocket Sbire
+  - "188" # Rocket Sbire
+  - "189" # Rocket Sbire
+  - "190" # Rocket Sbire
+  - "191" # Rocket Sbire
+  - "192" # Rocket Sbire
+  - "198" # Rocket Sbire
+  - "200" # Rocket Sbire
+  - "471" # Scientifique Malo
+  - "472" # Scientifique Yoni
+  - "478" # Commandant Ariane
+  - "485" # Commandant Amos
+  - "487" # Commandant Lambda
+  - "706" # Commandant Lance
+
+"209": # Ruines d’Alpha
+  - "042" # Kinésiste Jason
+
+"210": # Caves Jumelles
+  - "023" # Pokémaniac Raynal
+  - "025" # Montagnard Abélard
+  - "201" # Pokémaniac Evan
+  - "202" # Pokémaniac Denis
+  - "203" # Montagnard Gérard
+  - "204" # Montagnard Michel
+  - "205" # Topdresseur Gurvan
+  - "206" # Topdresseur Gerry
+  - "319" # Crache-Feu Andréa
+  - "363" # Topdresseur Emma
+  - "384" # Montagnard Sammy
+  - "390" # Crache-Feu Luigi
+
+"211": # Puits RAMOLOSS
+  - "012" # Rocket Sbire
+  - "013" # Rocket Sbire
+  - "101" # Rocket Sbire
+  - "486" # Commandant Lance
+
+"213": # Repaire Rocket
+  - "216" # Rocket Sbire
+  - "218" # Rocket Sbire
+  - "219" # Rocket Sbire
+  - "220" # Rocket Sbire
+  - "222" # Rocket Sbire
+  - "223" # Rocket Sbire
+  - "224" # Rocket Sbire
+  - "404" # Rocket Sbire
+  - "468" # Scientifique Zéphyr
+  - "469" # Scientifique Florin
+  - "470" # Scientifique Rayan
+  - "479" # Commandant Ariane
+  - "488" # Commandant Lambda
+  - "499" # Rocket Sbire
+  - "675" # Dresseur Peter
+
+"214": # Bois aux Chênes
+  - "001" # Rival Silver
+  - "266" # Rival Silver
+  - "269" # Rival Silver
+
+"215": # Doublon-Tunnel
+  - "014" # Pillard Elmer
+  - "193" # Rocket Sbire
+  - "195" # Rocket Sbire
+  - "196" # Rocket Sbire
+  - "197" # Rocket Sbire
+  - "199" # Rocket Sbire
+  - "227" # Rocket Sbire
+  - "228" # Rocket Sbire
+  - "271" # Rival Silver
+  - "283" # Pillard Hudson
+  - "288" # Rival Silver
+  - "289" # Rival Silver
+
+"216": # Mont Creuset
+  - "158" # Karatéka Fei
+  - "537" # Pokémaniac Augustin
+  - "538" # Intello Guillaume
+  - "539" # Intello Gauvain
+
+"221": # Route Victoire
+  - "264" # Rival Silver
+  - "268" # Rival Silver
+  - "272" # Rival Silver
+
+"222": # Antre du Dragon
+  - "500" # Topdresseur Tilio
+  - "501" # Topdresseur Enola
+  - "502" # Jumelles Line&Lana
+
+"224": # Forêt de Jade
+  - "695" # Scout Joan
+  - "696" # Scout Calixte
+  - "697" # Scout Fahd
+  - "698" # Scout Vivian
+  - "699" # Scout Emilian
+
+"226/1": # Aquaria (1)
+  - "139" # Pique-Nique Debra
+  - "235" # Montagnard Evrard
+  - "238" # Marin Gaston
+  - "239" # Marin Olivier
+  - "242" # Jongleur Chico
+  - "399" # Crache-Feu Bozo
+  - "424" # Pokéfan Léandre
+  - "425" # Jumelles Mily&Milia
+
+"454-9": # Arène de Jadielle
+  - "261" # Champion Blue
+
+"462-8": # Arène d’Argenta
+  - "253" # Champion Pierre
+
+"469-6": # Arène d’Azuria
+  - "254" # Champion Ondine
+
+"485-13": # Arène de Carmin sur Mer
+  - "255" # Champion Major Bob
+
+"492-5": # Arène de Céladopole
+  - "256" # Champion Erika
+
+"514-17": # Arène de Parmanie
+  - "257" # Champion Jeannine
+
+"531-8": # Arène de Safrania
+  - "258" # Champion Morgane
+
+"558-9": # Arène de Mauville
+  - "020" # Champion Albert
+
+"566-2": # Arène d’Ecorcia
+  - "021" # Champion Hector
+
+"574-13": # Arène d’Irisia
+  - "033" # Champion Jasmine
+
+"582-12": # Arène de Doublonville
+  - "030" # Champion Blanche
+
+"604-8-0": # Phare d’Oliville
+  - "037" # Gentleman Tancred
+  - "073" # Ornithologue Tom
+  - "211" # Marin Logan
+  - "212" # Marin Alberto
+  - "213" # Marin Noé
+  - "214" # Marin Jonas
+  - "215" # Fillette Aurore
+  - "217" # Ornithologue Tony
+  - "401" # Gentleman Louis
+
+"612-13-0": # Salle de Danse de Rosalia
+  - "160" # Kimono Umeko
+  - "161" # Kimono Sakura
+  - "162" # Kimono Tamao
+  - "163" # Kimono Komomo
+  - "164" # Kimono Satsuki
+
+"614-10": # Arène de Rosalia
+  - "031" # Champion Mortimer
+
+"623-2": # Arène d’Acajou
+  - "032" # Champion Frédo
+
+"631-10": # Arène d’Ebènelle
+  - "035" # Champion Sandra
+
+"742-0-3-6": # Arène de Cramois’Ile
+  - "259" # Champion Auguste
