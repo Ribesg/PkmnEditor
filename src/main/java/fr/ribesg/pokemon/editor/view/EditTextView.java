@@ -75,7 +75,9 @@ public final class EditTextView {
                     bottomLineLeft.setPrefWidth(500);
                     bottomLineLeft.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                    final CheckBox hideVarsButton = new CheckBox("Hide Variables");
+                    final CheckBox hideVarsButton = new CheckBox(
+                        this.controller.getLang().get("ui_textEditor_hideVars")
+                    );
                     bottomLineLeft.getChildren().add(hideVarsButton);
                     hideVarsButton.selectedProperty().addListener((obs, o, n) -> {
                         if (!o.equals(n)) {
@@ -93,12 +95,18 @@ public final class EditTextView {
                     bottomLineRight.setPrefWidth(500);
                     bottomLineRight.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                    this.saveButton = new Button("Apply");
+                    this.saveButton = new Button(
+                        this.controller.getLang().get("ui_textEditor_applyButton")
+                    );
                     bottomLineRight.getChildren().add(this.saveButton);
+                    this.saveButton.setOnAction(this::onSave);
 
-                    final Button cancelButton = new Button("Cancel");
+                    final Button cancelButton = new Button(
+                        this.controller.getLang().get("ui_textEditor_cancelButton")
+                    );
                     bottomLineRight.getChildren().add(cancelButton);
                     cancelButton.setCancelButton(true);
+                    cancelButton.setOnAction(this::onCancel);
                 }
             }
         }
@@ -106,6 +114,7 @@ public final class EditTextView {
         this.controller.getTexts().forEach(this.textsList.getItems()::add);
 
         this.stage = new Stage();
+        this.stage.setTitle(this.controller.getLang().get("ui_textEditor_textEditor", index));
         this.stage.setScene(new Scene(rootPane, 800, 600));
         this.stage.getScene().getStylesheets().add("style.css");
         this.stage.showAndWait();

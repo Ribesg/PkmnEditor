@@ -1,6 +1,7 @@
 package fr.ribesg.pokemon.editor.controller;
 
 import fr.ribesg.pokemon.editor.model.Context;
+import fr.ribesg.pokemon.editor.model.Lang;
 import fr.ribesg.pokemon.editor.view.EditTextView;
 import javafx.application.Platform;
 
@@ -34,5 +35,9 @@ public final class EditTextController {
         } catch (final InterruptedException ignored) {
         }
         Platform.runLater(this.view::close);
+    }
+
+    public Lang getLang() {
+        return this.model.getLang();
     }
 }
