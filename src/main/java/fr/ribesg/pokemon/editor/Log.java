@@ -100,6 +100,11 @@ public final class Log {
         Log.flush();
     }
 
+    public static void error(final Throwable t) {
+        Log.LOGGER.log(Level.SEVERE, "Error caught", t);
+        Log.flush();
+    }
+
     public static void flush() {
         for (final Handler h : Log.LOGGER.getHandlers()) {
             h.flush();

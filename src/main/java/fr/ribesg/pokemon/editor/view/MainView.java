@@ -1,7 +1,7 @@
 package fr.ribesg.pokemon.editor.view;
 
 import fr.ribesg.pokemon.editor.*;
-import fr.ribesg.pokemon.editor.controller.MainAppController;
+import fr.ribesg.pokemon.editor.controller.MainController;
 import fr.ribesg.pokemon.editor.model.Lang;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -14,26 +14,22 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
  * @author Ribesg
  */
-public final class MainApp extends Application {
-
-    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+public final class MainView extends Application {
 
     public static void launch() {
         Application.launch();
     }
 
-    private MainAppController controller;
+    private MainController controller;
 
     private Stage stage;
 
-    private BorderPane        rootPane;
     private Menu              fileMenu;
     private MenuItem          openFileMenuItem;
     private MenuItem          quitFileMenuItem;
@@ -53,17 +49,21 @@ public final class MainApp extends Application {
     private ComboBox<String>  trainersComboBox;
     private Button            trainersButton;
 
+    private int secondaryWindowCounter;
+
     @Override
     public void start(final Stage primaryStage) throws Exception {
-        this.controller = new MainAppController(this);
+        this.controller = new MainController(this);
 
         this.stage = primaryStage;
 
-        this.rootPane = new BorderPane();
+        this.secondaryWindowCounter = 0;
+
+        final BorderPane rootPane = new BorderPane();
         {
             final MenuBar menu = new MenuBar();
             {
-                this.rootPane.setTop(menu);
+                rootPane.setTop(menu);
 
                 this.fileMenu = new Menu();
                 {
@@ -98,7 +98,9 @@ public final class MainApp extends Application {
 
             final GridPane contentPane = new GridPane();
             {
-                this.rootPane.setCenter(contentPane);
+                rootPane.setCenter(contentPane);
+
+                final int colWidth = 190;
 
                 contentPane.setAlignment(Pos.CENTER);
                 contentPane.setHgap(10);
@@ -108,20 +110,25 @@ public final class MainApp extends Application {
                 {
                     contentPane.add(this.startersLabel, 0, 0, 4, 1);
 
-                    final int startersComboBoxWidth = 190;
                     this.starters1ComboBox = new ComboBox<>();
                     contentPane.add(this.starters1ComboBox, 0, 1);
-                    this.starters1ComboBox.setPrefWidth(startersComboBoxWidth);
+                    this.starters1ComboBox.setPrefWidth(colWidth);
+                    this.starters1ComboBox.setOnAction(this::onStartersChanged);
+
                     this.starters2ComboBox = new ComboBox<>();
                     contentPane.add(this.starters2ComboBox, 1, 1);
-                    this.starters2ComboBox.setPrefWidth(startersComboBoxWidth);
+                    this.starters2ComboBox.setPrefWidth(colWidth);
+                    this.starters2ComboBox.setOnAction(this::onStartersChanged);
+
                     this.starters3ComboBox = new ComboBox<>();
                     contentPane.add(this.starters3ComboBox, 2, 1);
-                    this.starters3ComboBox.setPrefWidth(startersComboBoxWidth);
+                    this.starters3ComboBox.setPrefWidth(colWidth);
+                    this.starters3ComboBox.setOnAction(this::onStartersChanged);
 
                     this.startersButton = new Button();
                     contentPane.add(this.startersButton, 3, 1);
                     this.startersButton.setMinWidth(Button.USE_PREF_SIZE);
+                    this.startersButton.setOnAction(this::onStartersApply);
                 }
 
                 this.textsLabel = new Label();
@@ -132,15 +139,18 @@ public final class MainApp extends Application {
                     {
                         contentPane.add(textsHBox, 0, 6);
 
+                        textsHBox.setPrefWidth(colWidth);
                         textsHBox.setSpacing(10);
 
                         this.textsComboBox = new ComboBox<>();
-                        this.textsComboBox.prefWidthProperty().bind(textsHBox.widthProperty());
                         textsHBox.getChildren().add(this.textsComboBox);
+                        this.textsComboBox.prefWidthProperty().bind(textsHBox.widthProperty());
+                        this.textsComboBox.setOnAction(this::onTextChanged);
 
                         this.textsButton = new Button();
                         this.textsButton.setMinWidth(Button.USE_PREF_SIZE);
                         textsHBox.getChildren().add(this.textsButton);
+                        this.textsButton.setOnAction(this::onEditText);
                     }
                 }
 
@@ -167,8 +177,9 @@ public final class MainApp extends Application {
 
             final TextArea textArea = new TextArea();
             {
-                this.rootPane.setBottom(textArea);
+                rootPane.setBottom(textArea);
 
+                textArea.getStyleClass().add("log");
                 textArea.setEditable(false);
                 textArea.setWrapText(true);
                 textArea.setMaxHeight(90);
@@ -190,7 +201,7 @@ public final class MainApp extends Application {
             this.trainersButton.setDisable(true);
         }
         this.useLang();
-        this.stage.setScene(new Scene(this.rootPane, 780, 320));
+        this.stage.setScene(new Scene(rootPane, 780, 320));
         this.stage.getScene().getStylesheets().add("style.css");
         this.stage.setResizable(false);
 
@@ -203,7 +214,14 @@ public final class MainApp extends Application {
 
     // Controller callbacks
 
-    public void romLoaded() {
+    public void romLoaded(
+        final int[] starters,
+        final String[] pkmnNames,
+        final int textsAmount,
+        final String[] trainersData
+    ) {
+        this.fileMenu.setDisable(false);
+        this.langMenu.setDisable(false);
         this.saveFileMenuItem.setDisable(false);
         this.startersLabel.setDisable(false);
         this.starters1ComboBox.setDisable(false);
@@ -213,14 +231,7 @@ public final class MainApp extends Application {
         this.textsComboBox.setDisable(false);
         this.trainersLabel.setDisable(false);
         this.trainersComboBox.setDisable(false);
-    }
 
-    public void fillComboBoxes(
-        final int[] starters,
-        final String[] pkmnNames,
-        final int textsAmount,
-        final String[] trainersData
-    ) {
         // Maybe we already have a ROM loaded, clean first
         this.starters1ComboBox.getItems().clear();
         this.starters2ComboBox.getItems().clear();
@@ -244,21 +255,30 @@ public final class MainApp extends Application {
         }
     }
 
+    public void romSaved() {
+        this.fileMenu.setDisable(false);
+        this.langMenu.setDisable(false);
+    }
+
     public void useLang() {
-        final Lang l = this.controller.getLang();
-        this.fileMenu.setText(l.get("ui_menu_file"));
-        this.openFileMenuItem.setText(l.get("ui_menu_file_load"));
-        this.saveFileMenuItem.setText(l.get("ui_menu_file_save"));
-        this.quitFileMenuItem.setText(l.get("ui_menu_file_quit"));
-        this.langMenu.setText(l.get("ui_menu_lang"));
-        this.enLangMenuItem.setText(l.get("ui_menu_lang_en"));
-        this.frLangMenuItem.setText(l.get("ui_menu_lang_fr"));
-        this.startersLabel.setText(l.get("ui_main_startersLabel"));
-        this.startersButton.setText(l.get("ui_main_startersApplyButton"));
-        this.textsLabel.setText(l.get("ui_main_textsLabel"));
-        this.textsButton.setText(l.get("ui_main_textEditButton"));
-        this.trainersLabel.setText(l.get("ui_main_trainersLabel"));
-        this.trainersButton.setText(l.get("ui_main_trainerEditButton"));
+        try {
+            final Lang l = this.controller.getLang();
+            this.fileMenu.setText(l.get("ui_menu_file"));
+            this.openFileMenuItem.setText(l.get("ui_menu_file_load"));
+            this.saveFileMenuItem.setText(l.get("ui_menu_file_save"));
+            this.quitFileMenuItem.setText(l.get("ui_menu_file_quit"));
+            this.langMenu.setText(l.get("ui_menu_lang"));
+            this.enLangMenuItem.setText(l.get("ui_menu_lang_en"));
+            this.frLangMenuItem.setText(l.get("ui_menu_lang_fr"));
+            this.startersLabel.setText(l.get("ui_main_startersLabel"));
+            this.startersButton.setText(l.get("ui_main_startersApplyButton"));
+            this.textsLabel.setText(l.get("ui_main_textsLabel"));
+            this.textsButton.setText(l.get("ui_main_textEditButton"));
+            this.trainersLabel.setText(l.get("ui_main_trainersLabel"));
+            this.trainersButton.setText(l.get("ui_main_trainerEditButton"));
+        } catch (final Throwable t) {
+            Log.error(t);
+        }
     }
 
     // Event handlers
@@ -269,7 +289,10 @@ public final class MainApp extends Application {
             final FileChooser fileChooser = this.getConfiguredFileChooser(true);
             final File file = fileChooser.showOpenDialog(this.stage);
             if (file != null) {
-                this.controller.loadRom(file);
+                this.fileMenu.setDisable(true);
+                this.langMenu.setDisable(true);
+                Log.info("Loading ROM, please wait...");
+                Main.EXECUTOR.submit(() -> this.controller.loadRom(file));
             }
         } catch (final Throwable t) {
             Log.error(t);
@@ -282,7 +305,9 @@ public final class MainApp extends Application {
             final FileChooser fileChooser = this.getConfiguredFileChooser(false);
             final File file = fileChooser.showOpenDialog(this.stage);
             if (file != null) {
-                this.controller.saveRom(file);
+                this.fileMenu.setDisable(true);
+                this.langMenu.setDisable(true);
+                Main.EXECUTOR.submit(() -> this.controller.saveRom(file));
             }
         } catch (final Throwable t) {
             Log.error(t);
@@ -291,7 +316,7 @@ public final class MainApp extends Application {
 
     private void onFileMenuQuitAction(final Event e) {
         e.consume();
-        MainApp.EXECUTOR.submit(() -> {
+        Main.EXECUTOR.submit(() -> {
             try {
                 Log.info("Exiting.");
                 Thread.sleep(150);
@@ -305,12 +330,67 @@ public final class MainApp extends Application {
 
     private void onEnLangAction(final Event e) {
         e.consume();
-        // TODO
+        Main.EXECUTOR.submit(() -> this.controller.changeLang("en"));
     }
 
     private void onFrLangAction(final Event e) {
         e.consume();
-        // TODO
+        Main.EXECUTOR.submit(() -> this.controller.changeLang("fr"));
+    }
+
+    private void onStartersChanged(final Event e) {
+        final int[] starters = new int[] {
+            this.starters1ComboBox.getSelectionModel().getSelectedIndex() + 1,
+            this.starters2ComboBox.getSelectionModel().getSelectedIndex() + 1,
+            this.starters3ComboBox.getSelectionModel().getSelectedIndex() + 1
+        };
+        if (!Arrays.stream(starters).anyMatch(i -> i == 0)) {
+            this.startersButton.setDisable(
+                Arrays.equals(starters, this.controller.getStarters())
+            );
+        }
+    }
+
+    private void onStartersApply(final Event e) {
+        final int[] starters = new int[] {
+            this.starters1ComboBox.getSelectionModel().getSelectedIndex() + 1,
+            this.starters2ComboBox.getSelectionModel().getSelectedIndex() + 1,
+            this.starters3ComboBox.getSelectionModel().getSelectedIndex() + 1
+        };
+        this.startersButton.setDisable(true);
+        Main.EXECUTOR.submit(() -> this.controller.setStarters(starters));
+    }
+
+    private void onTextChanged(final Event e) {
+        this.textsButton.setDisable(this.textsComboBox.getSelectionModel().getSelectedIndex() < 0);
+    }
+
+    private void onEditText(final Event e) {
+        try {
+            this.openingSecondaryWindow();
+            new EditTextView(
+                this.controller,
+                this.textsComboBox.getSelectionModel().getSelectedIndex()
+            );
+        } catch (final Throwable t) {
+            Log.error(t);
+        } finally {
+            this.closingSecondaryWindow();
+        }
+    }
+
+    private void openingSecondaryWindow() {
+        if (++this.secondaryWindowCounter > 0) {
+            this.fileMenu.setDisable(true);
+            this.langMenu.setDisable(true);
+        }
+    }
+
+    private void closingSecondaryWindow() {
+        if (--this.secondaryWindowCounter == 0) {
+            this.fileMenu.setDisable(false);
+            this.langMenu.setDisable(false);
+        }
     }
 
     // Tools

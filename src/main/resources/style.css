@@ -2,11 +2,11 @@
     -fx-padding: 0;
 }
 
-.text-area {
+.text-area, .list-view {
     -fx-background-color: -fx-background;
     -fx-border-color: -fx-outer-border transparent transparent transparent;
 }
 
-.text-area .content {
+.text-area.log .content {
     -fx-background-color: -fx-background;
 }

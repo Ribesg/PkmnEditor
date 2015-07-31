@@ -16,7 +16,9 @@ public final class Context {
     private Path romPath;
     private Rom  rom;
 
-    private int[]                                     starters;
+    private int[] originalStarters;
+    private int[] starters;
+
     private Map<Integer, Pair<List<String>, Boolean>> texts;
 
     public Context() throws IOException {
@@ -46,6 +48,7 @@ public final class Context {
         this.romPath = path;
         this.rom = new Rom(this.romPath);
         this.rom.load();
+        this.texts = new HashMap<>();
     }
 
     public void saveRom(final Path path) {
@@ -83,7 +86,7 @@ public final class Context {
 
     public void setTexts(final int index, final List<String> text) {
         if (!this.texts.containsKey(index)) {
-            throw new IllegalStateException("Failed to set Text which were not get before: " + index);
+            throw new IllegalStateException("Failed to set Text which was not get before: " + index);
         } else {
             this.texts.get(index).getLeft().clear();
             this.texts.get(index).getLeft().addAll(text);
