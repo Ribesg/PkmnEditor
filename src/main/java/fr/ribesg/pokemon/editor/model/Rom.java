@@ -1,13 +1,13 @@
 package fr.ribesg.pokemon.editor.model;
 
 import com.dabomstew.pkrandom.pokemon.Pokemon;
+import com.dabomstew.pkrandom.pokemon.Trainer;
 import com.dabomstew.pkrandom.romhandlers.Gen4RomHandler;
 import fr.ribesg.pokemon.editor.util.Pair;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 /**
@@ -53,6 +53,14 @@ public final class Rom {
                 this.handler.getPokemon().get(starters[2])
             )
         );
+    }
+
+    public List<Trainer> getTrainers() {
+        return Collections.unmodifiableList(new ArrayList<>(this.handler.getTrainers()));
+    }
+
+    public void setTrainers(final List<Trainer> trainerData) {
+        this.handler.setTrainers(new ArrayList<>(trainerData));
     }
 
     public String getPkmnName(final int num) {

@@ -1,8 +1,13 @@
 package fr.ribesg.pokemon.editor.model;
 
+import com.dabomstew.pkrandom.pokemon.Trainer;
+import fr.ribesg.pokemon.editor.config.YamlDocument;
+import fr.ribesg.pokemon.editor.config.YamlFile;
 import fr.ribesg.pokemon.editor.util.Pair;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -20,6 +25,8 @@ public final class Context {
     private int[] starters;
 
     private Map<Integer, Pair<List<String>, Boolean>> texts;
+
+    private String[] trainersLocation;
 
     public Context() throws IOException {
         this.lang = new Lang();
@@ -95,8 +102,54 @@ public final class Context {
 
     // Trainers
 
-    public String[] getTrainersInfo() {
-        return new String[0]; // TODO
+    public String getTrainerLocation(final int trainerIndex) throws IOException {
+        if (this.trainersLocation == null) {
+            final YamlFile file = new YamlFile();
+            file.loadFromString(
+                IOUtils.toString(
+                    ClassLoader.getSystemResourceAsStream("locationToTrainerMap.yml"),
+                    StandardCharsets.UTF_8
+                )
+            );
+
+            final List<Trainer> trainers = this.rom.getTrainers();
+            this.trainersLocation = new String[trainers.size()];
+
+            final YamlDocument doc = file.getDocuments().get(0);
+            doc.getKeys().stream()
+               .filter(key -> !"???".equals(key))
+               .forEach(key -> {
+                   final String keyString = this.rom.getString(key);
+                   final List<String> list = doc.getList(key);
+                   list.forEach(val -> {
+                       final int intVal = Integer.parseInt(val);
+                       this.trainersLocation[intVal] = keyString;
+                   });
+               })
+            ;
+
+            for (int i = 0; i < trainers.size(); i++) {
+                if (this.trainersLocation[i] == null) {
+                    this.trainersLocation[i] = "???";
+                }
+            }
+        }
+        return this.trainersLocation[trainerIndex];
+    }
+
+    public String[] getTrainersInfo() throws IOException {
+        final List<Trainer> trainers = this.rom.getTrainers();
+        final String[] res = new String[trainers.size()];
+        for (int i = 0; i < trainers.size(); i++) {
+            final Trainer t = trainers.get(i);
+            res[i] = String.format(
+                "%03d - %s (%s)",
+                i,
+                t.fullDisplayName,
+                this.getTrainerLocation(i)
+            );
+        }
+        return res;
     }
 
     // Pkmns

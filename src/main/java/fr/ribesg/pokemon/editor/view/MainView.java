@@ -250,9 +250,15 @@ public final class MainView extends Application {
         this.starters2ComboBox.getSelectionModel().select(starters[1] - 1);
         this.starters3ComboBox.getSelectionModel().select(starters[2] - 1);
         IntStream.range(0, textsAmount).forEach(this.textsComboBox.getItems()::add);
+        this.textsComboBox.setPromptText(
+            this.controller.getLang().get("ui_main_textsPrompt")
+        );
         for (final String trainerData : trainersData) {
             this.trainersComboBox.getItems().add(trainerData);
         }
+        this.trainersComboBox.setPromptText(
+            this.controller.getLang().get("ui_main_trainersPrompt")
+        );
     }
 
     public void romSaved() {
@@ -274,8 +280,14 @@ public final class MainView extends Application {
             this.startersButton.setText(l.get("ui_main_startersApplyButton"));
             this.textsLabel.setText(l.get("ui_main_textsLabel"));
             this.textsButton.setText(l.get("ui_main_textEditButton"));
+            if (!this.textsComboBox.getPromptText().isEmpty()) {
+                this.textsComboBox.setPromptText(l.get("ui_main_textsPrompt"));
+            }
             this.trainersLabel.setText(l.get("ui_main_trainersLabel"));
             this.trainersButton.setText(l.get("ui_main_trainerEditButton"));
+            if (!this.trainersComboBox.getPromptText().isEmpty()) {
+                this.trainersComboBox.setPromptText(l.get("ui_main_trainersPrompt"));
+            }
         } catch (final Throwable t) {
             Log.error(t);
         }
